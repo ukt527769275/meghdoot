@@ -1,0 +1,554 @@
+﻿@model AGROMET.Models.NotificationsModel
+@using Resources
+@{
+    ViewBag.Title = Resource.Alerts;
+    var StateID = "";
+    var DistrictID = "";
+    var BlockID = "";
+    var TypeOfRole = "";
+    var LanguageName = "";
+    var Select = Resource.Select;
+    if (Request.Cookies["StateID"] != null)
+    {
+        StateID = Request.Cookies["StateID"].Value;
+    }
+    if (Request.Cookies["DistrictID"] != null)
+    {
+        DistrictID = Request.Cookies["DistrictID"].Value;
+    }
+    if (Request.Cookies["BlockID"] != null)
+    {
+        BlockID = Request.Cookies["BlockID"].Value;
+    }
+    if (Request.Cookies["TypeOfRole"] != null)
+    {
+        TypeOfRole = Request.Cookies["TypeOfRole"].Value.ToString();
+    }
+    if (Request.Cookies["LanguageName"] != null)
+    {
+        LanguageName = Request.Cookies["LanguageName"].Value.ToString();
+    }
+}
+<style>
+    #notifications a {
+        color: black;
+        background-color: #a4d89a;
+    }
+</style>
+<div>
+    <div ng-app="viewNotifications">
+        <div ng-controller="ViewNotificationsController">
+            <div class="ng-cloak">
+                <div class="row">
+                    <div class="col-xs-pull-0 col-sm-2 col-md-2">
+                        <label class="colorscheme">@Resource.District</label>
+                        <select id="ddlDistrict" class="boxht widthfit" ng-model="SelectedDistrict" ng-init="GetDistrict(@StateID)" ng-options="y.DistrictName for (x,y) in District" ng-change="GetBlock(SelectedDistrict.DistrictID)"></select>
+                    </div>
+                    <div class="col-xs-pull-0 col-sm-2 col-md-2">
+                        <label class="colorscheme">@Resource.Block</label>
+                        <select id="ddlBlock" class="boxht widthfit" ng-model="SelectedBlock" ng-init="GetBlock(@DistrictID)" ng-options="y.BlockName for (x,y) in Block"></select>
+                    </div>
+                    <div class="col-xs-pull-0 col-sm-2 col-md-2">
+                        <label class="colorscheme">@Resource.Crop</label>
+                        <select id="ddlCrop" class="boxht widthfit" ng-model="SelectedCrop" ng-init="GetCrop()" ng-options="y.CropName for (x,y) in Crop"></select>
+                    </div>
+                    <div class="col-xs-pull-0 col-sm-2 col-md-2">
+                        <label> &emsp;</label>
+                        <br />
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <input type="button" class="btn btn-default boxht colorbrdrscheme colorbackscheme widthfit btnhover" value="@Resource.Search" ng-click="SearchNotifications(SelectedCategory.CACID,SelectedDistrict.DistrictID,SelectedBlock.BlockID,SelectedCrop.CropID)" />
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <input type="button" class="btn btn-default boxht colorbrdrscheme colorbackscheme widthfit btnhover" value="@Resource.Reset" ng-click="ResetSearchddl()" />
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="col-xs-pull-0 col-sm-2 col-md-2">
+                    </div>
+                    <div class="col-xs-pull-0 col-sm-2 col-md-2">
+                        <label> &emsp;</label>
+                        <br />
+                        @*<a href="@Url.Content("~/AGROMET/SendNotification/")">
+                        <input type="button" value="@Resource.CreateAlert" id="adv" class="btn pull-right colorbackscheme btnadv btnhover" />
+                        </a>*@
+                    </div>
+                </div>
+                <br />
+                <br />
+                @*<div ng-show="ErrorMsg">@Resource.Nodatafound</div>*@
+                <div class="row">
+                    <div class="col-xs-push-0 col-sm-4 col-md-4" ng-init="GetNotifications()">
+                        <div class="AdvisoryDetailspanel">
+                            <div class="mrgbtm colorscheme advlist" ng-repeat="item in Notifications | filter:Search">
+                                <button type="button" class="text-left fillavailable paddingtextleft btnstl"
+                                        ng-click="GetNotificationsById(item.NotificationsID);GetDistrictMapping(item.NotificationsID);GetBlockMapping(item.NotificationsID);GetCropMapping(item.NotificationsID);" ng-class="{selectlst: item.NotificationsID == notifcolor}">
+                                    <div class="mrgbtmadvisory txtadjust">
+                                        {{item.Title}}
+                                    </div>
+                                    <div class="row mrgbtmadvisory mrginitial">
+                                        <div class="col-xs-6 col-sm-6 col-md-7 paddingrightfix colorgrayscheme">
+                                            <span class="paddingtextleft">
+                                                {{item.State}}
+                                            </span>
+                                            <img src="~/Content/images/Geo_New.png" class="advisoryicon pull-left" />
+                                        </div>
+                                        <div class="col-xs-6 col-sm-6 col-md-5 colorgrayscheme">
+                                            <span class="paddingtextleft">
+                                                {{item.CreatedDateWeb}}
+                                            </span>
+                                            <img src="~/Content/images/list_calendar.png" class="advisoryicon pull-left" />
+                                        </div>
+                                    </div>
+                                    <div class="row mrgbtmadvisory mrginitial">
+                                        <div class="col-xs-6 col-sm-6 col-md-7 colorgrayscheme">
+                                            <table>
+                                                <tr>
+                                                    <td>
+                                                        <img src="~/Content/images/category.png" class="advisoryicon pull-left" />
+                                                    </td>
+                                                    <td>
+                                                        <div class="paddingtextleft">
+                                                            {{item.Category}}
+                                                        </div>
+                                                    </td>
+                                                    @*<td>
+            <img src="~/Content/images/list_crop.png" alt="" class="advisoryicon pull-left" />
+        </td>
+        <td>
+            <div class="paddingtextleft">
+                {{item.CropNames}}
+            </div>
+        </td>*@
+                                                </tr>
+                                            </table>
+                                        </div>
+                                        <div class="col-xs-6 col-sm-6 col-md-5 paddingrightfix colorgrayscheme">
+                                            <table>
+                                                <tr>
+                                                    @*<td>
+                                                    <img src="~/Content/images/category.png" class="advisoryicon pull-left" />
+                                                    </td>
+                                                    <td>
+                                                        <div class="paddingtextleft">
+                                                            {{item.Category}}
+                                                        </div>
+                                                    </td>*@
+                                                </tr>
+                                            </table>
+                                           
+                                        </div>
+                                    </div>
+                                </button>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-push-0 col-sm-8 col-md-8">
+                        <div ng-show="AdvisoryDetails" class="panel panel-default paddingtitlespace AdvisoryDetailspanel">
+                            <br />
+                            <div class="row">
+                                <div class="col-xs-7 col-sm-8 col-md-9">
+                                    <div class="colorscheme brdrbtmdtl lblfontsize mrgbtm">@Resource.Title</div>
+                                    <div class="mrgleft">{{NotificationsDetails.Title}}</div>
+                                </div>
+                                <div class="col-xs-5 col-sm-4 col-md-3">
+                                    <table class="pull-right">
+                                        <tr>
+                                            <td>
+                                                <img src="~/Content/images/list_calendar.png" class="advisoryicon pull-left mrgbtm" />
+                                                <br /><br />
+                                            </td>
+                                            <td>
+                                                <span class="paddingtextleft">{{NotificationsDetails.CreatedDate}}</span>
+                                                <br /><br />
+                                            </td>
+                                        </tr>
+                                        <tr>
+                                            <td>
+                                                <img src="~/Content/images/category.png" class="advisoryicon pull-left" />
+                                            </td>
+                                            <td> <span class="paddingtextleft">{{NotificationsDetails.Category}}</span></td>
+                                        </tr>
+                                    </table>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col-xs-push-0 col-sm-8 col-md-9">
+                                    <div class="colorscheme brdrbtmdtl mrgbtm lblfontsize">
+                                        @Resource.BriefText
+                                    </div>
+                                    <div class="mrgleft">
+                                        <span>
+                                            {{NotificationsDetails.BriefText}}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-5 col-sm-4 col-md-3">
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="col-xs-push-0 col-sm-8 col-md-9">
+                                    <div class="colorscheme brdrbtmdtl mrgbtm lblfontsize">
+                                        @Resource.Message
+                                    </div>
+                                    <div class="mrgleft">
+                                        <span>
+                                            {{NotificationsDetails.CompleteMessage}}
+                                        </span>
+                                    </div>
+                                </div>
+                                <div class="col-xs-5 col-sm-4 col-md-3">
+                                </div>
+                            </div>
+                            <br />
+                            <br />
+                            <div class="row">
+                                <div class="panel-group col-xs-pull-0 col-sm-pull-0 col-md-4" id="accordion">
+                                    <div ng-hide="districttag" class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" class="uline">
+                                                    @Resource.Districts <span class="pull-right"> <i class="arrow down"></i></span>
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="collapse1" class="panel-collapse collapse">
+                                            <ul class="list-group">
+                                                <li class="list-group-item" ng-repeat="Districtitem in DistrictMapping">
+                                                    {{Districtitem.DistictName}}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div ng-hide="blocktag" class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" class="uline">
+                                                    @Resource.Blocks <span class="pull-right"> <i class="arrow down"></i></span>
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="collapse2" class="panel-collapse collapse">
+                                            <ul class="list-group">
+                                                <li class="list-group-item" ng-repeat="Blockitem in BlockMapping">
+                                                    {{Blockitem.BlockName}}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div ng-hide="croptag" class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" class="uline">
+                                                    @Resource.Crops <span class="pull-right"> <i class="arrow down"></i></span>
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="collapse3" class="panel-collapse collapse">
+                                            <ul class="list-group">
+                                                <li class="list-group-item" ng-repeat="Cropitem in CropMapping">
+                                                    {{Cropitem.CropName}}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <br />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="imageModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-sm modaldialogs" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <button type="button" class="close" data-dismiss="modal">
+                                <span class="redcolor">  @Resource.Close </span><span class="redcolor"> &times;</span>
+                            </button>
+                            <br />
+                            <br />
+                            <div class="text-center h4">@Resource.Nodatafound</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+        </div>
+    </div>
+</div>
+@section scripts {
+    <script>
+    var app = angular.module("viewNotifications", []);
+    app.controller("ViewNotificationsController", function ($scope, $http) {
+        $scope.State = [];
+        $scope.District = [];
+        $scope.Block = [];
+        $scope.Crop = [];
+        $scope.Category = [];
+        $scope.Langauge = [];
+        $scope.Notifications = [];
+        $scope.NotificationsById = [];
+        $scope.NotificationsDetails = {};
+        $scope.DistrictMapping = [];
+        $scope.BlockMapping = [];
+        $scope.CropMapping = [];
+        $scope.TotalAdvisory = "";
+        $scope.AdvisoryDetails = false;
+        $scope.notifcolor = 0;
+        $scope.GetNotifications = function () {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetNotificationsList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { ScientistId: @TypeOfRole, LanguageName: "@LanguageName"}
+                }).then(function (response) {
+                    $scope.Notifications = response.data;
+                    $scope.TotalAdvisory = $scope.Notifications.length;
+                    if ($scope.Notifications.length > 0) {
+                        $scope.GetNotificationsById($scope.Notifications[0].NotificationsID);
+                        $scope.GetDistrictMapping($scope.Notifications[0].NotificationsID);
+                        $scope.GetBlockMapping($scope.Notifications[0].NotificationsID);
+                        $scope.GetCropMapping($scope.Notifications[0].NotificationsID);
+                        $scope.AdvisoryDetails = true;
+                    }
+                    else {
+                        $scope.AdvisoryDetails = false;
+                        $('#errorModal').modal();
+                    }
+                },
+                function (response) {
+                    $('#errorModal').modal();
+                });
+        }
+        $scope.SearchNotifications = function (CategoryID,DistrictID,BlockID,CropID) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("SearchNotificationsList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { ScientistId: @TypeOfRole, CategoryID: CategoryID, DistrictID:DistrictID, BlockID : BlockID, CropID : CropID, LanguageName: "@LanguageName"}
+                }).then(function (response) {
+                    $scope.Notifications = response.data;
+                    $scope.TotalAdvisory = $scope.Notifications.length;
+                    if ($scope.Notifications.length > 0) {
+                        $scope.GetNotificationsById($scope.Notifications[0].NotificationsID);
+                        $scope.GetDistrictMapping($scope.Notifications[0].NotificationsID);
+                        $scope.GetBlockMapping($scope.Notifications[0].NotificationsID);
+                        $scope.GetCropMapping($scope.Notifications[0].NotificationsID);
+                        $scope.AdvisoryDetails = true;
+                        
+                    }
+                    else {
+                        $scope.AdvisoryDetails = false;
+                        $('#errorModal').modal();
+                    }
+                },
+                function (response) {
+                    $('#errorModal').modal();
+                });
+        }
+        $scope.GetNotificationsById = function (NotificationsID) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetNotificationsById", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { NotificationsID: NotificationsID, LanguageName: "@LanguageName" }
+                }).then(function (response) {
+                    $scope.NotificationsById = response.data;
+                    $scope.NotificationsDetails = $scope.NotificationsById[0];
+                    $scope.notifcolor = NotificationsID;
+                },
+                function (response) {
+                    alert("No result found");
+                });
+        }
+        $scope.GetDistrictMapping = function (NotificationsID) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetNotificationDistMapping", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { NotificationsID: NotificationsID, LanguageName: "@LanguageName"}
+                }).then(function (response) {
+                    $scope.DistrictMapping = response.data;
+                    if (response.data.length == 0) {
+                        $scope.districttag = true;
+                    }
+                    else {
+                        $scope.districttag = false;
+                    }
+                },
+                function (response) {
+                    alert("No result found");
+                });
+        }
+        $scope.GetBlockMapping = function (NotificationsID) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetNotificationBlockMapping", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { NotificationsID: NotificationsID, LanguageName: "@LanguageName"}
+                }).then(function (response) {
+                    $scope.BlockMapping = response.data;
+                    if (response.data.length == 0) {
+                        $scope.blocktag = true;
+                    }
+                    else {
+                        $scope.blocktag = false;
+                    }
+                },
+                function (response) {
+                    alert("No result found");
+                });
+        }
+        $scope.GetCropMapping = function (NotificationsID) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetNotificationCropMapping", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { NotificationsID: NotificationsID, LanguageName: "@LanguageName"}
+                }).then(function (response) {
+                    $scope.CropMapping = response.data;
+                    if (response.data.length == 0) {
+                        $scope.croptag = true;
+                    }
+                    else {
+                        $scope.croptag = false;
+                    }
+                },
+                function (response) {
+                    alert("No result found");
+                });
+        }
+       
+        $scope.GetState = function (TypeOfRole,StateID) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetStateList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { TypeOfRole: TypeOfRole, LanguageName: "@LanguageName", StateID: StateID }
+                }).then(function (response) {
+                    $scope.State = response.data;
+                    //var item = { StateID: 0, StateName: "@Select", LanguageType: null, RefreshDateTime: "" }
+                    //$scope.State.splice(0, 0, item);
+                    $scope.SelectedState = $scope.State[0];
+                },
+                function (response) {
+                    alert("No result found");
+                });
+        }
+        $scope.GetDistrict = function (StateID) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetDistrictList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { TypeOfRole: @TypeOfRole, LanguageName: "@LanguageName", StateID: StateID }
+                }).then(function (response) {
+                    $scope.District = response.data;
+                     var item = { DistrictID: 0, DistrictName: "@Select", LanguageType: null, RefreshDateTime: "" }
+                    $scope.District.splice(0, 0, item);
+                    $scope.SelectedDistrict = $scope.District[0];
+                },
+                function (response) {
+                    alert("No result found");
+                });
+        }
+        $scope.GetBlock = function (DistrictID) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetBlockList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { TypeOfRole: @TypeOfRole, LanguageName: "@LanguageName", DistrictID: DistrictID }
+                }).then(function (response) {
+                    $scope.Block = response.data;
+                    var item = { BlockID: 0, BlockName: "@Select", LanguageType: null, RefreshDateTime: "" }
+                    $scope.Block.splice(0, 0, item);
+                    $scope.SelectedBlock = $scope.Block[0];
+                },
+                function (response) {
+                    alert("No result found");
+             });
+        }
+        $scope.GetBlockById = function () {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetBlockList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { TypeOfRole: @TypeOfRole, LanguageName: "@LanguageName", DistrictID: this.DistrictID }
+                }).then(function (response) {
+                $scope.Block = response.data;
+
+                },
+                function (response) {
+                    alert("No result found");
+             });
+        }
+        $scope.GetCrop = function () {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetCropList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { TypeOfRole: @TypeOfRole, LanguageName: "@LanguageName" }
+                }).then(function (response) {
+                    $scope.Crop = response.data;
+                    var item = { CropID: 0, CropName: "@Select", LanguageType: null, RefreshDateTime: "" }
+                    $scope.Crop.splice(0, 0, item);
+                    $scope.SelectedCrop = $scope.Crop[0];
+                },
+                function (response) {
+                    alert("No result found");
+                });
+        }
+        $scope.GetCategory = function () {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetCategoryList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { TypeOfRole: @TypeOfRole, LanguageName: "@LanguageName" }
+                }).then(function (response) {
+                    $scope.Category = response.data;
+                    var item = { CACID: 0, NotificationsCategory: "@Select", LanguageType: null, RefreshDateTime: "" }
+                    $scope.Category.splice(0, 0, item);
+                    $scope.SelectedCategory = $scope.Category[0];
+                },
+                function (response) {
+                    alert("No result found");
+                });
+        }
+        $scope.ResetSearchddl = function () {
+            $scope.SelectedCategory = $scope.Category[0];
+            $scope.SelectedDistrict = $scope.District[0];
+            $scope.SelectedBlock = $scope.Block[0];
+            $scope.SelectedCrop = $scope.Crop[0];
+            $scope.GetNotifications();
+        }
+    });
+    </script>
+}

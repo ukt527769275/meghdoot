@@ -1,0 +1,194 @@
+﻿@using AGROMET.Models
+@model LoginModel
+@using Resources
+@Styles.Render("~/Content/css")
+
+<script src='@Scripts.Url("~/bundles/modernizr")' async></script>
+<script src='@Scripts.Url("~/bundles/jquery")'></script>
+<script type="text/javascript">
+    history.pushState({ page: 1 }, "Title 1", "# ");
+    window.onhashchange = function (event) {
+        window.location.hash = " ";
+    };
+</script>
+<link rel="shortcut icon" href="~/favicon.ico" type="image/x-icon" />
+<meta charset="utf-8" />
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#3b5998" />
+<meta name="Description" content="AGROMET Solution">
+<meta http-equiv="cache-Control" content="no-cache">
+<meta http-equiv="Prgma" content="no-cache">
+<meta http-equiv="expires" content="0">
+<title>@Resource.AGROMETWebApplication</title>
+<style>
+    body {
+        background-color: aliceblue;
+    }
+</style>
+<div>
+    <br />
+    <br />
+    <div class="form brdrlogin">
+        <br />
+        <h1 class="text-center colorscheme"><b>@Resource.AGROMET</b></h1>
+        <br />
+        <img src="~/Content/images/Ministry-of-Earth-Sciences.jpg" class="img-disp-cls" alt="" id="logo" />
+        <br />
+        <br />
+        @using (Html.BeginForm("Login", "Account", new { ReturnUrl = ViewBag.ReturnUrl }, FormMethod.Post, new { @class = "form-horizontal", role = "form" }))
+        {
+            @Html.TextBoxFor(m => m.EmailID, "", new { @class = "forms-control", @type = "email", id = "sid", placeholder = " Email ID" })
+            <br />
+            @Html.PasswordFor(m => m.SignInPassword, new { @class = "forms-control", @type = "password", maxlength = "4", @onkeypress = "return Pin(event)", placeholder = " PIN", id = "pin" })
+            @*<div class="mrgbtm">
+                <a href="#" id="frgtpnid" class="pinlink">@Resource.ForgetPIN</a>
+            </div>*@
+            <br />
+            <div class="center-block">
+                <input type="submit" value="Sign in" class="btn btn-default" id="signin" />
+            </div>
+            <br />
+            <div class="text-center"><p style="color:red" id="errormsg">@ViewBag.message</p><br /></div>
+        }
+    </div>
+
+    <div class="modal fade" id="ImageModal" role="dialog" aria-labelledby="imageModalCenterTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered modal-sm modaldialogs" role="document">
+            <div class="modal-content">
+                <div class="modal-body">
+                    <button type="button" class="close" data-dismiss="modal">
+                        <span class="redcolor">  @Resource.Close </span><span class="redcolor"> &times;</span>
+                    </button>
+                    <br />
+                    <br />
+                    <div><label class="colorscheme">@Resource.EnterPhoneNumber</label></div>
+                    <div>
+                        <input type="text" id="pinnumber" class="frgtpin" , onkeypress="return MobileNumber(event)" />
+                    </div>
+                    <br />
+                    <div>
+                        <div class="pull-right">
+                            <input type="button" value="@Resource.GetSMS" onclick="GetSms()" class="btn btn-default btn-md colorbackscheme btnadv btnhover" />
+                        </div>
+                    </div>
+                    <br />
+                    <div class="text-center">
+                        <br />
+                        <p style="color:red" id="errormsgpin"></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section Scripts {
+    @Scripts.Render("~/bundles/jqueryval")
+
+}
+<style>
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        margin: 0;
+    }
+</style>
+<script>
+    function MobileNumber(evt) {
+        $("#pinnumber").empty();
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+            return false;
+        }
+        var i = document.getElementById("pinnumber").value;
+        if (i.length >= 10)
+            return false;
+        return true;
+    }
+
+    function Pin(evt) {
+        $("#errormsg").empty();
+        evt = (evt) ? evt : window.event;
+        var charCode = (evt.which) ? evt.which : evt.keyCode;
+        if (charCode > 31 && (charCode < 48 || charCode > 57))
+            return false;
+        return true;
+    }
+
+    function KeyPress(e) {
+        var x = e || window.event;
+        var key = (x.keyCode || x.which);
+        if (key == 13 || key == 3) {
+            var id = document.getElementById("sid").value;
+            var pin = document.getElementById("pin").value;
+            if (!/^\w+([\.-]?\w+)*@@\w+([\.-]?\w+)*(\.\w{2,3})+$/.test(id)) {
+                $("#errormsg").text("Plese enter valid Email ID!");
+                return false;
+            }
+            if (pin.length < 4) {
+                $("#errormsg").text("Plese enter 4 digit pin number!");
+                return false;
+            }
+            document.Login.submit();
+        }
+    }
+    $('#signin').click(function (e) {
+
+        var pin = document.getElementById("pin").value;
+
+        if (pin.length < 4) {
+            $("#errormsg").text("Plese enter 4 digit pin number!");
+            $('#pin').focus();
+            return false;
+        }
+        document.AGROMET.submit();
+    });
+    $('body').keypress(function (e) {
+        if (e.which === 13) {
+            $("input[value='Sign in']").trigger('click');
+        }
+    });
+
+    $(function () { $('#sid').focus(); });
+
+    $('document').ready(function () {
+        $('#frgtpnid').click(function () {
+            $("#pinnumber").val("");
+            $("#errormsgpin").text("");
+            $('#ImageModal').modal();
+        });
+    });
+</script>
+<script>
+    function GetSms() {
+        debugger;
+        var id = document.getElementById("pinnumber").value;
+        if (id.length < 10) {
+            $("#errormsgpin").text("Plese enter 10 digit mobile number!");
+            $('#pinnumber').focus();
+            return false;
+        }
+        else {
+            var postData = {
+                LogInId: id
+            };
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: '@Url.Action("GetForgetPassword", "Account")',
+                async: false,
+                data: postData,
+                success: function (response) {
+                    $("#errormsgpin").text(response);
+                },
+                error: function (result) {
+                    debugger;
+                    alert("error");
+                }
+            });
+        }
+    }
+</script>

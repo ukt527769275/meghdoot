@@ -1,0 +1,321 @@
+﻿@model AGROMET.Models.WeatherForecastDetailsResponse
+@using Resources
+@{
+    ViewBag.Title = Resource.Weather;
+    var datetime = System.DateTime.Now.ToString("yyyy-MM-dd");
+    var StateID = "";
+    var DistrictID = "";
+    var BlockID = "";
+    var LanguageName = "";
+    var TypeOfRole = "";
+    var roleid = "";
+    if (Request.Cookies["RoleId"] != null)
+    {
+        roleid = Request.Cookies["RoleId"].Value;
+    }
+    if (Request.Cookies["StateID"] != null)
+    {
+        StateID = Request.Cookies["StateID"].Value;
+    }
+    if (Request.Cookies["DistrictID"] != null)
+    {
+        DistrictID = Request.Cookies["DistrictID"].Value;
+    }
+    if (Request.Cookies["BlockID"] != null)
+    {
+        BlockID = Request.Cookies["BlockID"].Value;
+    }
+    if (Request.Cookies["LanguageName"] != null)
+    {
+        LanguageName = Request.Cookies["LanguageName"].Value;
+    }
+    if (Request.Cookies["TypeOfRole"] != null)
+    {
+        TypeOfRole = Request.Cookies["TypeOfRole"].Value.ToString();
+    }
+}
+<style>
+    #home a {
+        color: black;
+        background-color: #a4d89a;
+    }
+</style>
+<div ng-app="Agromet">
+    <div ng-controller="HomeController">
+        <div class="ng-cloak">
+            <div class="row">
+                <div class="col-xs-push-0 col-sm-6 col-md-6" ng-init="GetWeather()">
+                    <div class="row" ng-hide="weathertag">
+                        <div class="col-xs-4 col-sm-4 col-md-4">
+                            
+                            <div class="weatherheading text-center colorscheme" ng-if="current.BlockID == 0">
+                                <h3>{{current.DistrictName | uppercase}}</h3>
+                            </div>
+                            <div class="weatherheading text-center colorscheme" ng-if="current.BlockID != 0">
+                                <h3>{{current.BlockName | uppercase}}</h3>
+                            </div>
+                            <img src="~/Content/images/few_clouds.png" alt="" class="imgweather" />
+                        </div>
+                        <div class="col-xs-4 col-sm-4 col-md-4 paddingleftfix">
+                            <br />
+                            <br />
+                            <br />
+                            <br />
+                            @*<div class="tempdisp">
+            <img src="~/Content/images/temprature.png" alt="" class="imgweatherdetail" />
+            {{current.TempAvg}}
+        </div>
+        <br />*@
+                            <br />
+                            <div class="tempdisp colorscheme">
+                                <img src="~/Content/images/temprature.png" alt="" class="tempiconbig" />
+                                {{current.TempMin}} / {{current.TempMax}}
+                            </div>
+                            <br />
+                            <br />
+
+                            <div class="tempdisp">{{current.Cloud}}</div>
+                        </div>
+                        <div class="col-xs-4 col-sm-4 col-md-4 paddingfix">
+                            <br />
+                            <p class="weatherdetailtxtblk">&nbsp;{{current.ForeCastDate_Lang}}</p>
+                            <br />
+                            <div class="weatherdetailtxtblk imgweatherdetail weatherdetailtxt">
+                                <img src="~/Content/images/rain.png" alt="" class="imgweatherdetail" />
+                                &emsp; {{current.Rainfall}}
+                                <br />
+                                <br />
+                                <img src="~/Content/images/humadity.png" alt="" class="imgweatherdetail" />
+                                &emsp;{{current.HumidityI}} / {{current.HumidityII}}
+                                <br />
+                                <br />
+                                <img src="~/Content/images/Wind_speed.png" alt="" class="imgweatherdetail" />
+                                &emsp;{{current.WindSpeed}}
+                                <br />
+                                <br />
+                                <img src="~/Content/images/{{current.ImgDirection}}" alt="" class="imgweatherdetail" />
+                                &emsp;{{current.WindDirection}}
+
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-xs-0 col-sm-6 col-md-6">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <br class="hidden-xs" />
+                            <br class="hidden-xs" />
+                            <br class="hidden-xs" />
+                            <br class="hidden-xs" />
+                            <br class="hidden-xs" />
+                            <br class="hidden-xs" />
+                            <br class="hidden-xs" />
+                            <br class="hidden-xs" />
+                            <br />
+                            <div class="paddingdate colorscheme">
+                                @Resource.SelectDate<br />@*<input type="date" ng-model="date" ng-change="GetWeather()" />*@
+
+                                <div class="form-group">
+                                    <div class='input-group date' id='datetimepicker1'>
+                                        <input type='text' class="form-control" ng-model="date" ng-change="GetWeather()" placeholder="@datetime" />
+                                        <span class="input-group-addon">
+                                            <span class="glyphicon glyphicon-calendar"></span>
+                                        </span>
+                                    </div>
+                                </div>
+
+                            </div>
+                            @*<div class="col-md-2 mrgtopbtm"></div>
+                                <div class="col-md-2 paddingfix">
+                                    <input type="button" id="prevnxt" value="< <" class="prenxtbtn" ng-click="previous()" />
+                                </div>
+                                <div class="col-md-4 paddingfix">
+                                    <div class="today text-center">{{current.ForeCastDate_Lang}}</div>
+                                </div>
+                                <div class="col-md-2 paddingfix">
+                                    <input type="button" id="prevnxt" value="> >" class="prenxtbtn pull-right" ng-click="next()" />
+                                </div>
+                                <div class="col-md-1"></div>*@
+                        </div>
+                        <div class="hidden-xs col-sm-6 col-md-6">
+                            <br />
+                            <div class="pull-right">
+                                @*<a href="@Url.Content("~/AGROMET/AddAdvisoryCategory/")"><input type="button" value="@Resource.AddAdvisory" id="adv" class="btn btn-lg colorbackscheme btnadv btnhover" /></a>*@
+                            </div>
+                            <br />
+                            <br />
+                            <br />
+                            <br />
+                            <div ng-init="GetCount()">
+                                <div class="row">
+                                    @*<a href="@Url.Action("CropAdvisory","AGROMET")">*@
+                                        @*<div class="col-xs-6 col-sm-6 col-md-6 colorbackscheme mrgritecnt brdrrds wdt boxshado btnhover">
+                                            <div class="text-center countsize">{{Count.CropAdvisoryCount}}</div>
+                                            <div class="text-center mrgbtm">@Resource.Advisories</div>
+                                        </div>*@
+                                    @*</a>*@
+                                   @* <a href="@Url.Action("Notifications","AGROMET")">*@
+                                        @*<div class="col-xs-6 col-sm-6 col-md-6 colorbackscheme mrgritecnt brdrrds wdt boxshado btnhover">
+                                            <div class="text-center countsize">{{Count.NotificationCount}}</div>
+                                            <div class="text-center mrgbtm">@Resource.Alerts</div>
+                                        </div>*@
+                                    @*</a>*@
+                                </div>
+
+                                <div class="row">
+                                    @*<a href="@Url.Action("Surveys","AGROMET")">
+                                        <div class="col-xs-6 col-sm-6 col-md-6 colorbackscheme mrgritecnt brdrrds wdt boxshado btnhover">
+                                            <div class="text-center countsize">{{Count.SurveyCount}}</div>
+                                            <div class="text-center mrgbtm">@Resource.Surveys</div>
+                                        </div>
+                                    </a>*@
+                                    @if (@roleid == "3")
+                                    {
+                                        <a href="@Url.Action("Users", "AGROMET")">
+                                            <div class="col-xs-6 col-sm-6 col-md-6 colorbackscheme mrgritecnt brdrrds wdt boxshado btnhover">
+                                                <div class="text-center countsize">{{Count.UsersCount}}</div>
+                                                <div class="text-center mrgbtm">@Resource.Users</div>
+                                            </div>
+                                        </a>
+                                    }
+                                    </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="paddingleftspace" ng-hide="weathertag">
+                <div class="row">
+                    <div class="col-xs-6 col-sm-2 col-md-2 bottombox paddingrightfix boxshado" ng-repeat="item in NextFour">
+                        <div class="weatherdetailtxtblk mrgtopbtm">{{item.ForeCastDate_Lang}}</div>
+                        <div class="col-xs-5 col-sm-5 col-md-5 paddingrightfix paddingleftfix center-block">
+                            <img src="~/Content/images/few_clouds.png" alt="" class="imgweathersm mrgbtm" />
+                            <div class="weatherdetailtxtsm mrgbtmimg">
+                                <br />
+                                <img src="~/Content/images/temprature.png" alt="" class="tempicon" />
+                                {{current.TempMin}}
+                            </div>
+                            <div class="weatherdetailtxtsm">
+                                <img src="~/Content/images/temprature.png" alt="" class="tempicon" />
+                                {{current.TempMax}}
+                            </div>
+                        </div>
+                        <div class="col-xs-7 col-sm-7 col-md-7 weatherdetailtxtsm paddingleftfix paddingrightfix">
+                            <div class="mrgbtmimg">
+                                <img src="~/Content/images/rain.png" alt="" class="imgweatherdetailsm" />
+                                &nbsp; {{item.Rainfall}}
+                            </div>
+                            <div class="mrgbtmimg">
+                                <img src="~/Content/images/humadity.png" alt="" class="imgweatherdetailsm" />
+                                &nbsp; {{item.HumidityI}} / {{current.HumidityII}}
+                            </div>
+                            <div class="mrgbtmimg">
+                                <img src="~/Content/images/Wind_speed.png" alt="" class="imgweatherdetailsm" />
+                                &nbsp; {{item.WindSpeed}}
+                            </div>
+                            <div class="mrgbtmimg">
+                                <img src="~/Content/images/{{item.ImgDirection}}" alt="" class="imgweatherdetailsm" />
+                                &nbsp; {{item.WindDirection}}
+                            </div>
+                        </div>
+                        <div class="weatherdetailtxtsm mrgbtmadvisory weatherdetailtxtblk text-center mrgleftles">
+                          {{item.Cloud}}
+                        </div>
+                    </div>
+                    <br class="hidden-sm hidden-md hidden-lg" />
+                </div>
+            </div>
+            <div ng-show="msg">
+                <div class="modal fade" id="ImageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-sm modaldialogs" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <button type="button" class="close" data-dismiss="modal"><span class="redcolor">  @Resource.Close </span><span class="redcolor"> &times;</span>
+                                </button>
+                                <br />
+                                <br />
+                                <div class="text-center h4">@Resource.Nodatafound</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+    <script>
+    var app = angular.module("Agromet", []);
+    app.controller("HomeController", function ($scope, $http) {
+        $scope.Weather = [];
+        $scope.current = [];
+        $scope.NextFour = [];
+        $scope.datevalue = "";
+        $scope.GetWeather = function () {
+            $scope.msg = false;
+            if ($scope.date != null && $scope.date != "") {
+                $scope.datevalue = $scope.date;
+            }
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetWeatherList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { StateID: @StateID, DistrictID: @DistrictID, BlockID: @BlockID , LanguageType: "@LanguageName", WeatherDate: $scope.datevalue }
+            }).then(function (response) {
+                $scope.Weather = response.data;
+                if ($scope.Weather.length == 0) {
+                    $scope.NextFour = [];
+                    $scope.current = [];
+                    $scope.msg = true;
+                    $scope.weathertag = true;
+                    $('#ImageModal').modal();
+                }
+                else {
+                    $scope.current = $scope.Weather[0];
+                    $scope.NextFour = [];
+                    for (var i = 1; i < $scope.Weather.length; i++) {
+                        $scope.NextFour.push($scope.Weather[i]);
+                        $scope.msg = false;
+                        $scope.weathertag = false;
+                    }
+                }
+            },
+            function (response) {
+                $scope.msg = true;
+                $scope.weathertag = true;
+                $('#ImageModal').modal();
+            });
+        }
+        $scope.GetCount = function () {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetCount", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { ScientistId : @TypeOfRole }
+                }).then(function (response) {
+                $scope.Count = response.data;
+
+                },
+                function (response) {
+                    alert("No result found");
+             });
+        }
+    });
+    </script>
+
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
+    <script>
+        $(document).ready(function () {
+            $('#datetimepicker1').datepicker({
+                format: 'yyyy-mm-dd', todayHighlight: true,
+                autoclose: true,
+            });
+        });
+    </script>
+}

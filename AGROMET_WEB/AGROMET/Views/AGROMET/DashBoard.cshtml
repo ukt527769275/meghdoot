@@ -1,0 +1,14 @@
+﻿<script language="JavaScript">
+    function autoResize(id) {
+        var iframeElement = document.getElementById(id);
+        var height = document.documentElement.clientHeight - 140;
+        iframeElement.style.height = height + "px";
+}
+</script>
+
+@{
+    ViewBag.Title = "Dashboard";
+}
+
+<iframe id="iframeDashboard" onLoad="autoResize('iframeDashboard');" width="100%" height="850px" src="https://lookerstudio.google.com/embed/reporting/46f6b9c9-5367-40c3-96e9-1140c5d69731/page/JoRJD" frameborder="0" style="border:0" allowfullscreen ></iframe>
+

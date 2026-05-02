@@ -1,0 +1,501 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<root>
+  <!-- 
+    Microsoft ResX Schema 
+    
+    Version 2.0
+    
+    The primary goals of this format is to allow a simple XML format 
+    that is mostly human readable. The generation and parsing of the 
+    various data types are done through the TypeConverter classes 
+    associated with the data types.
+    
+    Example:
+    
+    ... ado.net/XML headers & schema ...
+    <resheader name="resmimetype">text/microsoft-resx</resheader>
+    <resheader name="version">2.0</resheader>
+    <resheader name="reader">System.Resources.ResXResourceReader, System.Windows.Forms, ...</resheader>
+    <resheader name="writer">System.Resources.ResXResourceWriter, System.Windows.Forms, ...</resheader>
+    <data name="Name1"><value>this is my long string</value><comment>this is a comment</comment></data>
+    <data name="Color1" type="System.Drawing.Color, System.Drawing">Blue</data>
+    <data name="Bitmap1" mimetype="application/x-microsoft.net.object.binary.base64">
+        <value>[base64 mime encoded serialized .NET Framework object]</value>
+    </data>
+    <data name="Icon1" type="System.Drawing.Icon, System.Drawing" mimetype="application/x-microsoft.net.object.bytearray.base64">
+        <value>[base64 mime encoded string representing a byte array form of the .NET Framework object]</value>
+        <comment>This is a comment</comment>
+    </data>
+                
+    There are any number of "resheader" rows that contain simple 
+    name/value pairs.
+    
+    Each data row contains a name, and value. The row also contains a 
+    type or mimetype. Type corresponds to a .NET class that support 
+    text/value conversion through the TypeConverter architecture. 
+    Classes that don't support this are serialized and stored with the 
+    mimetype set.
+    
+    The mimetype is used for serialized objects, and tells the 
+    ResXResourceReader how to depersist the object. This is currently not 
+    extensible. For a given mimetype the value must be set accordingly:
+    
+    Note - application/x-microsoft.net.object.binary.base64 is the format 
+    that the ResXResourceWriter will generate, however the reader can 
+    read any of the formats listed below.
+    
+    mimetype: application/x-microsoft.net.object.binary.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Binary.BinaryFormatter
+            : and then encoded with base64 encoding.
+    
+    mimetype: application/x-microsoft.net.object.soap.base64
+    value   : The object must be serialized with 
+            : System.Runtime.Serialization.Formatters.Soap.SoapFormatter
+            : and then encoded with base64 encoding.
+
+    mimetype: application/x-microsoft.net.object.bytearray.base64
+    value   : The object must be serialized into a byte array 
+            : using a System.ComponentModel.TypeConverter
+            : and then encoded with base64 encoding.
+    -->
+  <xsd:schema id="root" xmlns="" xmlns:xsd="http://www.w3.org/2001/XMLSchema" xmlns:msdata="urn:schemas-microsoft-com:xml-msdata">
+    <xsd:import namespace="http://www.w3.org/XML/1998/namespace" />
+    <xsd:element name="root" msdata:IsDataSet="true">
+      <xsd:complexType>
+        <xsd:choice maxOccurs="unbounded">
+          <xsd:element name="metadata">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" />
+              </xsd:sequence>
+              <xsd:attribute name="name" use="required" type="xsd:string" />
+              <xsd:attribute name="type" type="xsd:string" />
+              <xsd:attribute name="mimetype" type="xsd:string" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="assembly">
+            <xsd:complexType>
+              <xsd:attribute name="alias" type="xsd:string" />
+              <xsd:attribute name="name" type="xsd:string" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="data">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+                <xsd:element name="comment" type="xsd:string" minOccurs="0" msdata:Ordinal="2" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" msdata:Ordinal="1" />
+              <xsd:attribute name="type" type="xsd:string" msdata:Ordinal="3" />
+              <xsd:attribute name="mimetype" type="xsd:string" msdata:Ordinal="4" />
+              <xsd:attribute ref="xml:space" />
+            </xsd:complexType>
+          </xsd:element>
+          <xsd:element name="resheader">
+            <xsd:complexType>
+              <xsd:sequence>
+                <xsd:element name="value" type="xsd:string" minOccurs="0" msdata:Ordinal="1" />
+              </xsd:sequence>
+              <xsd:attribute name="name" type="xsd:string" use="required" />
+            </xsd:complexType>
+          </xsd:element>
+        </xsd:choice>
+      </xsd:complexType>
+    </xsd:element>
+  </xsd:schema>
+  <resheader name="resmimetype">
+    <value>text/microsoft-resx</value>
+  </resheader>
+  <resheader name="version">
+    <value>2.0</value>
+  </resheader>
+  <resheader name="reader">
+    <value>System.Resources.ResXResourceReader, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <resheader name="writer">
+    <value>System.Resources.ResXResourceWriter, System.Windows.Forms, Version=4.0.0.0, Culture=neutral, PublicKeyToken=b77a5c561934e089</value>
+  </resheader>
+  <data name="AddAdvisory" xml:space="preserve">
+    <value>అడ్వయిజరీని చేర్చు</value>
+  </data>
+  <data name="AGROMET" xml:space="preserve">
+    <value>ఆగ్రోమెట్</value>
+  </data>
+  <data name="AGROMETWebApplication" xml:space="preserve">
+    <value>అగ్రోమెట్ వెబ్ అప్లికేషన్</value>
+  </data>
+  <data name="Blocks" xml:space="preserve">
+    <value>విభాగములు</value>
+  </data>
+  <data name="CropAdvisory" xml:space="preserve">
+    <value>పంట సలహాలు</value>
+  </data>
+  <data name="Crops" xml:space="preserve">
+    <value>పంటలు</value>
+  </data>
+  <data name="Districts" xml:space="preserve">
+    <value>జిల్లాలు</value>
+  </data>
+  <data name="Home" xml:space="preserve">
+    <value>మొదటి పేజీ</value>
+  </data>
+  <data name="Logout" xml:space="preserve">
+    <value>బయటకు</value>
+  </data>
+  <data name="Notifications" xml:space="preserve">
+    <value>ప్రకటనలు</value>
+  </data>
+  <data name="Publish" xml:space="preserve">
+    <value>విడుదలచేయు</value>
+  </data>
+  <data name="Recommendations" xml:space="preserve">
+    <value>సిఫార్సులు</value>
+  </data>
+  <data name="ScientistName" xml:space="preserve">
+    <value>శాస్త్రవేత్త  పేరు</value>
+  </data>
+  <data name="State" xml:space="preserve">
+    <value>రాష్ట్రం</value>
+  </data>
+  <data name="Surveys" xml:space="preserve">
+    <value>సేకరణలు</value>
+  </data>
+  <data name="Title" xml:space="preserve">
+    <value>శీర్షిక</value>
+  </data>
+  <data name="Today" xml:space="preserve">
+    <value>ఈ రోజు</value>
+  </data>
+  <data name="Transalationrequired" xml:space="preserve">
+    <value>అనువాదం కావాలి</value>
+  </data>
+  <data name="Users" xml:space="preserve">
+    <value>Scientists</value>
+  </data>
+  <data name="Selectall" xml:space="preserve">
+    <value>అన్నీ ఎంచుకోండి</value>
+  </data>
+  <data name="Block" xml:space="preserve">
+    <value>విభాగము</value>
+  </data>
+  <data name="District" xml:space="preserve">
+    <value>జిల్లా</value>
+  </data>
+  <data name="UserProfile" xml:space="preserve">
+    <value>Scientist Profile</value>
+  </data>
+  <data name="EmailID" xml:space="preserve">
+    <value>ఈమెయిల్ ఐ.డి</value>
+  </data>
+  <data name="Profile" xml:space="preserve">
+    <value>వ్యక్తిగత వివరాలు</value>
+  </data>
+  <data name="BriefText" xml:space="preserve">
+    <value>క్లుప్తంగా వ్రాయుము</value>
+  </data>
+  <data name="CompleteMessage" xml:space="preserve">
+    <value>మెసేజ్</value>
+  </data>
+  <data name="NotificationMethod" xml:space="preserve">
+    <value>ప్రకటన విధానం</value>
+  </data>
+  <data name="OptionOneTitle" xml:space="preserve">
+    <value>మొదటి శీర్షిక</value>
+  </data>
+  <data name="OptionTwoTitle" xml:space="preserve">
+    <value>రెండవ శీర్షిక</value>
+  </data>
+  <data name="Question" xml:space="preserve">
+    <value>ప్రశ్న</value>
+  </data>
+  <data name="EnterBriefText" xml:space="preserve">
+    <value>క్లుప్తంగా వ్రాయుము</value>
+  </data>
+  <data name="EnterMessage" xml:space="preserve">
+    <value>సందేశాన్ని నమోదు చేయండి</value>
+  </data>
+  <data name="EnterOptionTwoTitle" xml:space="preserve">
+    <value>ఎంటర్ ఆప్షన్ 2 టైటిల్</value>
+  </data>
+  <data name="EnterRecommendations" xml:space="preserve">
+    <value>సిఫార్సులు వ్రాయుము</value>
+  </data>
+  <data name="EnterOptionOneTitle" xml:space="preserve">
+    <value>ఎంటర్ ఆప్షన్ 1 టైటిల్</value>
+  </data>
+  <data name="EnterQuestion" xml:space="preserve">
+    <value>ప్రశ్న వ్రాయుము</value>
+  </data>
+  <data name="MobileApplication" xml:space="preserve">
+    <value>మొబైల్ అప్లికేషన్</value>
+  </data>
+  <data name="SmsAlert" xml:space="preserve">
+    <value>ఎస్.ఎమ్.ఎస్  హెచ్చరిక</value>
+  </data>
+  <data name="EnterTitle" xml:space="preserve">
+    <value>శీర్షిక వ్రాయుము</value>
+  </data>
+  <data name="SelectDate" xml:space="preserve">
+    <value>తేదీని ఎంచుకోండి</value>
+  </data>
+  <data name="SelectCategory" xml:space="preserve">
+    <value>వర్గం ఎంచుకోండి</value>
+  </data>
+  <data name="AdvisoryClose" xml:space="preserve">
+    <value>మూసివేయండి</value>
+  </data>
+  <data name="SearchAdvisory" xml:space="preserve">
+    <value>అడ్వయిజరీని శోధించండి</value>
+  </data>
+  <data name="CropAdvisoryImages" xml:space="preserve">
+    <value>పంట సలహాల చిత్రాలు</value>
+  </data>
+  <data name="View" xml:space="preserve">
+    <value>చూడండి</value>
+  </data>
+  <data name="Category" xml:space="preserve">
+    <value>వర్గం</value>
+  </data>
+  <data name="Entersearchterm" xml:space="preserve">
+    <value>శోధన పదాన్ని నమోదు చేయండి</value>
+  </data>
+  <data name="TotalAdvisory" xml:space="preserve">
+    <value>మొత్తం అడ్వయిజరీలు</value>
+  </data>
+  <data name="Add" xml:space="preserve">
+    <value>చేర్చు</value>
+  </data>
+  <data name="Department" xml:space="preserve">
+    <value>శాఖ</value>
+  </data>
+  <data name="FirstName" xml:space="preserve">
+    <value>మొదటి పేరు</value>
+  </data>
+  <data name="LastName" xml:space="preserve">
+    <value>చివరి పేరు</value>
+  </data>
+  <data name="Mobile" xml:space="preserve">
+    <value>మొబైల్</value>
+  </data>
+  <data name="ServiceArea" xml:space="preserve">
+    <value>సర్వీస్ ఏరియా</value>
+  </data>
+  <data name="Search" xml:space="preserve">
+    <value>శోధించండి</value>
+  </data>
+  <data name="SearchUsers" xml:space="preserve">
+    <value>వినియోగదారుని శోధించండి</value>
+  </data>
+  <data name="Language" xml:space="preserve">
+    <value>భాష</value>
+  </data>
+  <data name="Select" xml:space="preserve">
+    <value>--ఎంచుకోండి--</value>
+  </data>
+  <data name="Cancel" xml:space="preserve">
+    <value>రద్దు</value>
+  </data>
+  <data name="Advisory" xml:space="preserve">
+    <value>అడ్వయిజరీ</value>
+  </data>
+  <data name="Close" xml:space="preserve">
+    <value>Close</value>
+  </data>
+  <data name="Crop" xml:space="preserve">
+    <value>పంట</value>
+  </data>
+  <data name="Date" xml:space="preserve">
+    <value>తేదీ</value>
+  </data>
+  <data name="CharactersCount" xml:space="preserve">
+    <value>Title Characters Count</value>
+  </data>
+  <data name="UploadImageFiles" xml:space="preserve">
+    <value>చిత్రా(లు) అప్లోడ్ చేయండి</value>
+  </data>
+  <data name="CropAdvisoryAudio" xml:space="preserve">
+    <value>పంట సలహాల ఆడియో</value>
+  </data>
+  <data name="UploadAudioFile" xml:space="preserve">
+    <value>ఆడియో  అప్లోడ్ చేయండి</value>
+  </data>
+  <data name="Nodatafound" xml:space="preserve">
+    <value>డేటా కనుగొనబడలేదు!</value>
+  </data>
+  <data name="Audio" xml:space="preserve">
+    <value>ఆడియో</value>
+  </data>
+  <data name="Images" xml:space="preserve">
+    <value>చిత్రాలు</value>
+  </data>
+  <data name="Email" xml:space="preserve">
+    <value>ఇమెయిల్</value>
+  </data>
+  <data name="FeMale" xml:space="preserve">
+    <value>మహిళ</value>
+  </data>
+  <data name="Gender" xml:space="preserve">
+    <value>లింగము</value>
+  </data>
+  <data name="Institution" xml:space="preserve">
+    <value>సంస్థ</value>
+  </data>
+  <data name="Location" xml:space="preserve">
+    <value>స్థానం</value>
+  </data>
+  <data name="Male" xml:space="preserve">
+    <value>పురుషుడు</value>
+  </data>
+  <data name="PinCode" xml:space="preserve">
+    <value>పిన్ కోడ్</value>
+  </data>
+  <data name="Reset" xml:space="preserve">
+    <value>రీసెట్</value>
+  </data>
+  <data name="SendNotification" xml:space="preserve">
+    <value>నోటిఫికేషన్ పంపండి</value>
+  </data>
+  <data name="Send" xml:space="preserve">
+    <value>Send</value>
+  </data>
+  <data name="NotSupport" xml:space="preserve">
+    <value>Your browser does not support the audio element.</value>
+  </data>
+  <data name="AddNotification" xml:space="preserve">
+    <value>Add Notification</value>
+  </data>
+  <data name="Message" xml:space="preserve">
+    <value>Messaage</value>
+  </data>
+  <data name="Designation" xml:space="preserve">
+    <value>Designation</value>
+  </data>
+  <data name="EnterPhoneNumber" xml:space="preserve">
+    <value>Enter Phone Number</value>
+  </data>
+  <data name="EnterMobile" xml:space="preserve">
+    <value>Please enter 10 digit mobile number</value>
+  </data>
+  <data name="Notificationerr" xml:space="preserve">
+    <value>Please select either mobile or sms notification checkbox!</value>
+  </data>
+  <data name="Pleaseselect" xml:space="preserve">
+    <value>Please select</value>
+  </data>
+  <data name="Transalate" xml:space="preserve">
+    <value>Transalate</value>
+  </data>
+  <data name="AdvisoryFor" xml:space="preserve">
+    <value>Advisory For</value>
+  </data>
+  <data name="AdvisoryType" xml:space="preserve">
+    <value>Advisory Type</value>
+  </data>
+  <data name="AlertsType" xml:space="preserve">
+    <value>Alerts Type</value>
+  </data>
+  <data name="AddAdvisoryCategory" xml:space="preserve">
+    <value>Add Advisory Category</value>
+  </data>
+  <data name="AdvisoryCategory" xml:space="preserve">
+    <value>Advisory Category</value>
+  </data>
+  <data name="AgroAdvisoryDetails" xml:space="preserve">
+    <value>Agro Advisory Details</value>
+  </data>
+  <data name="EndDate" xml:space="preserve">
+    <value>End Date</value>
+  </data>
+  <data name="EnterAgroAdvisoryDetails" xml:space="preserve">
+    <value>Enter Agro Advisory Details</value>
+  </data>
+  <data name="EnterWeatherCondition" xml:space="preserve">
+    <value>Enter Weather Condition</value>
+  </data>
+  <data name="Period" xml:space="preserve">
+    <value>Period</value>
+  </data>
+  <data name="StartDate" xml:space="preserve">
+    <value>Start Date</value>
+  </data>
+  <data name="WeatherCondition" xml:space="preserve">
+    <value>Weather Condition</value>
+  </data>
+  <data name="Save" xml:space="preserve">
+    <value>Save</value>
+  </data>
+  <data name="SelectCrop" xml:space="preserve">
+    <value>Select Crop</value>
+  </data>
+  <data name="ClearAll" xml:space="preserve">
+    <value>Clear All</value>
+  </data>
+  <data name="Agronomy" xml:space="preserve">
+    <value>Agronomy</value>
+  </data>
+  <data name="SMSText" xml:space="preserve">
+    <value>SMS Text</value>
+  </data>
+  <data name="Next" xml:space="preserve">
+    <value>Next</value>
+  </data>
+  <data name="AddCrop" xml:space="preserve">
+    <value>Add Crop</value>
+  </data>
+  <data name="EnterSMSText" xml:space="preserve">
+    <value>Enter SMS Text</value>
+  </data>
+  <data name="AdvisoryList" xml:space="preserve">
+    <value>Advisory List</value>
+  </data>
+  <data name="CropList" xml:space="preserve">
+    <value>Crop List</value>
+  </data>
+  <data name="Advisories" xml:space="preserve">
+    <value>Advisories</value>
+  </data>
+  <data name="CreateAlert" xml:space="preserve">
+    <value>Create Alert</value>
+  </data>
+  <data name="YouTubeLink" xml:space="preserve">
+    <value>You Tube Link</value>
+  </data>
+  <data name="Video" xml:space="preserve">
+    <value>Video</value>
+  </data>
+  <data name="ForgetPIN" xml:space="preserve">
+    <value>Forget PIN</value>
+  </data>
+  <data name="DashBoard" xml:space="preserve">
+    <value>Dashboard</value>
+  </data>
+  <data name="BulletinNo" xml:space="preserve">
+    <value>Bulletin No.</value>
+  </data>
+  <data name="FarmerName" xml:space="preserve">
+    <value>Name</value>
+  </data>
+  <data name="Rating" xml:space="preserve">
+    <value>Rating</value>
+  </data>
+  <data name="FarmerPhone" xml:space="preserve">
+    <value>Phone</value>
+  </data>
+  <data name="GoBack" xml:space="preserve">
+    <value>Go Back</value>
+  </data>
+  <data name="FarmerDetails" xml:space="preserve">
+    <value>Farmer Details</value>
+  </data>
+  <data name="Feedback" xml:space="preserve">
+    <value>Feedback</value>
+  </data>
+  <data name="Weather" xml:space="preserve">
+    <value>Weather</value>
+  </data>
+  <data name="FarmerNames" xml:space="preserve">
+    <value>Farmer Name</value>
+  </data>
+</root>

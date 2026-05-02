@@ -1,0 +1,113 @@
+﻿@model AGROMET.Models.Languages
+@using Resources
+@{
+    ViewBag.Title = "Add Languages";
+}
+@using (Html.BeginForm("AddLanguages", "AGROMET", FormMethod.Post, new { enctype = "multipart/form-data", id = "cropadvisory" }))
+{
+    <div class="row">
+        <div class="col-xs-4 col-sm-4 col-md-4">
+            <label for="assamese">Assamese</label><br />
+            @Html.TextAreaFor(m => m.Assamese, new { @class = "widthlng", id = "assamese" })
+            <br />
+            <label for="Bengali">Bengali</label><br />
+            @Html.TextAreaFor(m => m.Bengali, new { @class = "widthlng", id = "Bengali" })
+            <br />
+            <label for="Bhili">Bhili</label><br />
+            @Html.TextAreaFor(m => m.Bhili, new { @class = "widthlng", id = "Bhili" })
+            <br />
+            <label for="Bodo">Bodo</label><br />
+            @Html.TextAreaFor(m => m.Bodo, new { @class = "widthlng", id = "Bodo" })
+            <br />
+            <label for="Dogri">Dogri</label><br />
+            @Html.TextAreaFor(m => m.Dogri, new { @class = "widthlng", id = "Dogri" })
+            <br />
+            <label for="Gondi">Gondi</label><br />
+            @Html.TextAreaFor(m => m.Gondi, new { @class = "widthlng", id = "Gondi" })
+            <br />
+            <label for="Gujarati">Gujarati</label><br />
+            @Html.TextAreaFor(m => m.Gujarati, new { @class = "widthlng", id = "Gujarati" })
+            <br />
+            <label for="Hindi">Hindi</label><br />
+            @Html.TextAreaFor(m => m.Hindi, new { @class = "widthlng", id = "Hindi" })
+            <br />
+            <label for="Ho">Ho</label><br />
+            @Html.TextAreaFor(m => m.Ho, new { @class = "widthlng", id = "Ho" })
+            <br />
+            <label for="Kannada">Kannada</label><br />
+            @Html.TextAreaFor(m => m.Kannada, new { @class = "widthlng", id = "Kannada" })
+            <br />
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4">
+            <label for="Kashmiri">Kashmiri</label><br />
+            @Html.TextAreaFor(m => m.Kashmiri, new { @class = "widthlng", id = "Kashmiri" })
+            <br />
+            <label for="Khandeshi">Khandeshi</label><br />
+            @Html.TextAreaFor(m => m.Khandeshi, new { @class = "widthlng", id = "Khandeshi" })
+            <br />
+            <label for="Khasi">Khasi</label><br />
+            @Html.TextAreaFor(m => m.Khasi, new { @class = "widthlng", id = "Khasi" })
+            <br />
+            <label for="Konkani">Konkani</label><br />
+            @Html.TextAreaFor(m => m.Konkani, new { @class = "widthlng", id = "Konkani" })
+            <br />
+            <label for="Kurukh">Kurukh</label><br />
+            @Html.TextAreaFor(m => m.Kurukh, new { @class = "widthlng", id = "Kurukh" })
+            <br />
+            <label for="Maithili">Maithili</label><br />
+            @Html.TextAreaFor(m => m.Maithili, new { @class = "widthlng", id = "Maithili" })
+            <br />
+            <label for="Malayalam">Malayalam</label><br />
+            @Html.TextAreaFor(m => m.Malayalam, new { @class = "widthlng", id = "Malayalam" })
+            <br />
+            <label for="Manipuri">Manipuri</label><br />
+            @Html.TextAreaFor(m => m.Manipuri, new { @class = "widthlng", id = "Manipuri" })
+            <br />
+            <label for="Marati">Marati</label><br />
+            @Html.TextAreaFor(m => m.Marati, new { @class = "widthlng", id = "Marati" })
+            <br />
+            <label for="Mundari">Mundari</label><br />
+            @Html.TextAreaFor(m => m.Mundari, new { @class = "widthlng", id = "Mundari" })
+            <br />
+        </div>
+        <div class="col-xs-4 col-sm-4 col-md-4">
+            <label for="Nepali">Nepali</label><br />
+            @Html.TextAreaFor(m => m.Nepali, new { @class = "widthlng", id = "Nepali" })
+            <br />
+            <label for="Oriya">Oriya</label><br />
+            @Html.TextAreaFor(m => m.Oriya, new { @class = "widthlng", id = "Oriya" })
+            <br />
+            <label for="Punjabi">Punjabi</label><br />
+            @Html.TextAreaFor(m => m.Punjabi, new { @class = "widthlng", id = "Punjabi" })
+            <br />
+            <label for="Santali">Santali</label><br />
+            @Html.TextAreaFor(m => m.Santali, new { @class = "widthlng", id = "Santali" })
+            <br />
+            <label for="Sindhi">Sindhi</label><br />
+            @Html.TextAreaFor(m => m.Sindhi, new { @class = "widthlng", id = "Sindhi" })
+            <br />
+            <label for="Tamil">Tamil</label><br />
+            @Html.TextAreaFor(m => m.Tamil, new { @class = "widthlng", id = "Tamil" })
+            <br />
+            <label for="Telugu">Telugu</label><br />
+            @Html.TextAreaFor(m => m.Telugu, new { @class = "widthlng", id = "Telugu" })
+            <br />
+            <label for="Tulu">Tulu</label><br />
+            @Html.TextAreaFor(m => m.Tulu, new { @class = "widthlng", id = "Tulu" })
+            <br />
+            <label for="Urdu">Urdu</label><br />
+            @Html.TextAreaFor(m => m.Urdu, new { @class = "widthlng", id = "Urdu" })
+            <br />
+            <br />
+            <br />
+            <br />
+            <input type="submit" value="Save" id="savelng" class="btn btn-default btn-md colorbackscheme pull-right btnhover" />
+            <br />
+            <br />
+            <br />
+            <br />  <br />
+            <br />
+        </div>
+
+    </div>
+}

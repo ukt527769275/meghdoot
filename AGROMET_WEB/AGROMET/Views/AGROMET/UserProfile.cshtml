@@ -1,0 +1,60 @@
+﻿@model List<AGROMET.Models.UserProfile>
+@using Resources
+@{
+    ViewBag.Title = "UserProfile";
+    var Image = "";
+    var imgdata = "data:image/jpg;base64,";
+    if (Request.Cookies["Image"] != null)
+    {
+        Image = imgdata + Request.Cookies["Image"].Value;
+    }
+}
+<div class="view_profile_sec">
+    <br />
+    @if (Model.Count > 0)
+    {
+        foreach (var item in Model)
+        {
+            <p class="profileheading colorscheme text-center">@Resource.Profile</p>
+            <div class="row">
+                <div class="col-md-9 col-sm-9 col-xs-9">
+                    <div class="colorscheme"><b>@item.TitleName  @item.UserName</b></div>
+                    <br />
+                    <div class="colorscheme"><b>@item.PhoneNumber</b></div>
+                </div>
+                <div class="col-md-3 col-sm-3 col-xs-3 text-right">
+                    <img src="@Image" class="profileimg" alt="" />
+                </div>
+            </div>
+            <div class="brd_bt">
+                <label class="col-md-6 col-sm-6 col-xs-6" style="font-weight:unset">
+                    @Resource.EmailID
+                </label> <span class="col-md-6 col-sm-6 col-xs-6">
+                    @item.EmailID
+                </span>
+            </div>
+            <div class="brd_bt">
+                <label class="col-md-6 col-sm-6 col-xs-6" style="font-weight:unset">
+                    @Resource.State
+                </label> <span class="col-md-6 col-sm-6 col-xs-6">
+                    @item.StateName
+                </span>
+            </div>
+            <div class="brd_bt">
+                <label class="col-md-6 col-sm-6 col-xs-6" style="font-weight:unset">
+                    @Resource.District
+                </label> <span class="col-md-6 col-sm-6 col-xs-6">
+                    @item.DistrictName
+                </span>
+            </div>
+            @*<div class="brd_bt">
+                <label class="col-md-6 col-sm-6 col-xs-6" style="font-weight:unset">
+                    @Resource.Block
+                </label> <span class="col-md-6 col-sm-6 col-xs-6">
+                    @item.BlockName
+                </span>
+            </div>*@
+        }
+    }
+</div>
+

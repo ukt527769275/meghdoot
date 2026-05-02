@@ -1,0 +1,635 @@
+﻿@using Resources
+@{
+    ViewBag.Title = "FarmerDetals";
+    var CAMID = ViewBag.CAMID;
+    var CropAdvisoryID = ViewBag.CropAdvisoryID;
+    var LogInId = ViewBag.LogInId;
+    var LanguageName = "";
+    var StateID = "";
+    var DistrictID = "";
+    var BlockID = "";
+    if (Request.Cookies["LanguageName"] != null)
+    {
+        LanguageName = Request.Cookies["LanguageName"].Value.ToString();
+    }
+    if (Request.Cookies["StateID"] != null)
+    {
+        StateID = Request.Cookies["StateID"].Value;
+    }
+    if (Request.Cookies["DistrictID"] != null)
+    {
+        DistrictID = Request.Cookies["DistrictID"].Value;
+    }
+    if (Request.Cookies["BlockID"] != null)
+    {
+        BlockID = Request.Cookies["BlockID"].Value;
+    }
+}
+<style>
+    #dashboard a {
+        color: black;
+        background-color: #a4d89a;
+    }
+  
+</style>
+<div ng-app="viewFarmer">
+    <div ng-controller="ViewDetailsController">
+        <div class="ng-cloak">
+            
+            <div class="row">
+                <div class="col-xs-4 col-sm-4 col-md-4">
+                    <div>
+                        <h3>@Resource.FarmerDetails</h3>
+                    </div>
+                </div>
+                <div class="col-xs-4 col-sm-4 col-md-4">
+                    <div ng-if="FeedBack.isFeedback">
+                        <h3>@Resource.Feedback</h3>
+                    </div>
+                </div>
+                <div class="col-xs-4 col-sm-4 col-md-4">
+                    <a href="@Url.Action("Dashboard","AGROMET")"><input type="button" value="@Resource.GoBack" id="adv" class="btn pull-right colorbackscheme btnhover btn-md " /></a>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-4 col-sm-4 col-md-4">
+                    <table ng-init="GetFarmerDetails()" class="tbl">
+                        <tr>
+                            <td>@Html.Label(Resource.FarmerName)</td>
+                            <td> : {{FarmerDetails.FirstName}} {{FarmerDetails.LastName}}</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.Label(Resource.FarmerPhone)</td>
+                            <td> : {{FarmerDetails.LogInId}} </td>
+                        </tr>
+                        <tr>
+                            <td>@Html.Label(Resource.State)</td>
+                            <td> : {{FarmerDetails.StateName}}</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.Label(Resource.District) &nbsp;</td>
+                            <td> : {{FarmerDetails.DistrictName}}</td>
+                        </tr>
+                        <tr>
+                            <td>@Html.Label(Resource.Block)</td>
+                            <td> : {{FarmerDetails.BlockName}}</td>
+                        </tr>
+                    </table>
+                </div>
+                <div class="col-xs-8 col-sm-8 col-md-8" ng-if="FeedBack.isFeedback">
+
+                    <label class="tbl">Are you satisfied with Weather Report? </label>
+                                <span class="tbl" ng-if="FeedBack.Q1">&emsp;&emsp;Yes</span>
+                                <span class="tbl" ng-if="!FeedBack.Q1">&emsp;&emsp;No</span>
+                    <br />
+                    <br />
+                    <label class="tbl">Are you satisfied with Crop Advisory?</label>
+                    <span class="tbl" ng-if="FeedBack.Q2">&emsp;&emsp;&emsp;Yes</span>
+                    <span class="tbl" ng-if="!FeedBack.Q2">&emsp;&emsp;&emsp;No</span>
+                    <br />
+                    <br />
+                    <label class="tbl">Comments</label>
+                    <div class="tbl">
+                        {{FeedBack.Comments}}
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div>
+                <div ng-init="GetCAMById()">
+                    <div ng-show="AdvisoryDetails" class="panel panel-default paddingtitleadvspace ">
+                        <br />
+                        <div class="row">
+                            <div class="col-xs-7 col-sm-8 col-md-9">
+                                @*<div class="colorscheme brdrbtmdtl lblfontsize mrgbtm">@Resource.Title</div>*@
+                                <table>
+                                    <tr>
+                                        <td>
+                                            <img src="~/Content/images/category.png" class="advisoryicon pull-left" />
+                                        </td>
+                                        <td> <div>&nbsp;{{CropAdvisoryDetails.Category}}</div></td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-xs-5 col-sm-4 col-md-3">
+                                <table class="pull-right">
+                                    <tr>
+                                        <td>
+                                            <img src="~/Content/images/list_calendar.png" class="advisoryicon pull-left mrgbtm" />
+                                            <br /><br />
+                                        </td>
+                                        <td>
+                                            <span class="paddingtxtleft">{{CAMByIdDetails.PeriodStartDate}}</span>
+                                            <br /><br />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <img src="~/Content/images/list_calendar.png" class="advisoryicon pull-left" />
+                                        </td>
+                                        <td> <div class="paddingtxtleft">{{CAMByIdDetails.PeriodEndDate}}</div></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-xs-2 col-sm-2 col-md-2 col-half-offset" ng-if="CAMByIdDetails.D1">
+                                <img src="/Content/images/checked-checkbox.png" class="imgchk mrgbtm" />
+                            </div>
+                            <div class="col-xs-2 col-sm-2 col-md-2 col-half-offset" ng-if="CAMByIdDetails.D2">
+                                <img src="/Content/images/checked-checkbox.png" class="imgchk mrgbtm" />
+                            </div>
+                            <div class="col-xs-2 col-sm-2 col-md-2 col-half-offset" ng-if="CAMByIdDetails.D3">
+                                <img src="/Content/images/checked-checkbox.png" class="imgchk mrgbtm" />
+                            </div>
+                            <div class="col-xs-2 col-sm-2 col-md-2 col-half-offset" ng-if="CAMByIdDetails.D4">
+                                <img src="/Content/images/checked-checkbox.png" class="imgchk mrgbtm" />
+                            </div>
+                            <div class="col-xs-2 col-sm-2 col-md-2 col-half-offset" ng-if="CAMByIdDetails.D5">
+                                <img src="/Content/images/checked-checkbox.png" class="imgchk mrgbtm" />
+                            </div>
+                        </div>
+                        <div class="row" ng-hide="weathertag">
+                            <div class="col-xs-6 col-sm-2 col-md-2 col-half-offset bottomboxadv paddingrightfix boxshado" ng-repeat="item in NextFour">
+                                <div class="weatherdetailtxtblk mrgtopbtm">{{item.ForeCastDate_Lang}}</div>
+                                <div class="col-xs-5 col-sm-5 col-md-4 paddingrightfix paddingleftfix">
+                                    <img src="~/Content/images/few_clouds.png" alt="" class="imgweathersm mrgbtm" />
+                                    <div class="weatherdetailtxtsm mrgbtmimg">
+                                        <br />
+                                        <img src="~/Content/images/temprature.png" alt="" class="tempicon" />
+                                        {{current.TempMin}}
+                                    </div>
+                                    <div class="weatherdetailtxtsm">
+                                        <img src="~/Content/images/temprature.png" alt="" class="tempicon" />
+                                        {{current.TempMax}}
+                                    </div>
+                                </div>
+                                <div class="col-xs-7 col-sm-7 col-md-8 weatherdetailtxtsm paddingleftfix paddingrightfix">
+                                    <div class="mrgbtmimg">
+                                        <img src="~/Content/images/rain.png" alt="" class="imgweatherdetailsm" />
+                                        {{item.Rainfall}}
+                                    </div>
+                                    <div class="mrgbtmimg">
+                                        <img src="~/Content/images/humadity.png" alt="" class="imgweatherdetailsm" />
+                                        {{item.HumidityI}} / {{current.HumidityII}}
+                                    </div>
+                                    <div class="mrgbtmimg">
+                                        <img src="~/Content/images/Wind_speed.png" alt="" class="imgweatherdetailsm" />
+                                        {{item.WindSpeed}}
+                                    </div>
+                                    <div class="mrgbtmimg">
+                                        <img src="~/Content/images/{{item.ImgDirection}}" alt="" class="imgweatherdetailsm" />
+                                        {{item.WindDirection}}
+                                    </div>
+                                </div>
+                                <div class="weatherdetailtxtsm mrgbtmadvisory weatherdetailtxtblk">
+                                    &emsp; {{item.Cloud}}
+                                </div>
+                            </div>
+                            <br class="hidden-sm hidden-md hidden-lg" />
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-xs-push-0 col-sm-8 col-md-9">
+                                <div class="colorscheme brdrbtmdtl mrgbtm lblfontsize">
+                                    @Resource.WeatherCondition
+                                </div>
+                                <div class="mrgleft">
+                                    <span>
+                                        {{CAMByIdDetails.WeatherCondition}}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="col-xs-5 col-sm-4 col-md-3">
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-xs-push-0 col-sm-8 col-md-9">
+                                <div class="colorscheme brdrbtmdtl mrgbtm lblfontsize">@Resource.Agronomy</div>
+                                <div class="mrgleft"><span class="contentwrap">{{CAMByIdDetails.AgroAdvisoryDetails}}</span></div>
+                            </div>
+                            <div class="col-xs-5 col-sm-4 col-md-3">
+                                <div class="panel-group" id="accordion">
+                                    <div ng-hide="districttag" class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" class="uline">
+                                                    @Resource.Districts <span class="pull-right"> <i class="arrow down"></i></span>
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="collapse1" class="panel-collapse collapse">
+                                            <ul class="list-group">
+                                                <li class="list-group-item" ng-repeat="Districtitem in DistrictMapping">
+                                                    {{Districtitem.DistictName}}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                    <div ng-hide="blocktag" class="panel panel-default">
+                                        <div class="panel-heading">
+                                            <h4 class="panel-title">
+                                                <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" class="uline">
+                                                    @Resource.Blocks <span class="pull-right"> <i class="arrow down"></i></span>
+                                                </a>
+                                            </h4>
+                                        </div>
+                                        <div id="collapse2" class="panel-collapse collapse">
+                                            <ul class="list-group">
+                                                <li class="list-group-item" ng-repeat="Blockitem in BlockMapping">
+                                                    {{Blockitem.BlockName}}
+                                                </li>
+                                            </ul>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+
+                        <div class="row">
+                            <div class="col-md-6">
+                            </div>
+                            <div class="col-md-6">
+                                <div class="pull-right">
+                                    @*<a data-ng-href="@Url.Action("AddAdvisory", "AGROMET")?CAMID={{CAMByIdDetails.CAMID}}"><input type="button" value="@Resource.AddCrop" class="  btn btn-md colorbackscheme btnhover" /></a>*@
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                          <div ng-show="CropDetails">
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-xs-7 col-sm-8 col-md-9">
+                                         
+                                            @*<div class="colorscheme brdrbtmdtl lblfontsize mrgbtm">@Resource.Title</div>
+                                    <div class="mrgleft">{{CropAdvisoryDetails.Title}}</div>*@
+                                        </div>
+                                        <div class="col-xs-5 col-sm-4 col-md-3">
+                                            
+                                            @*<table class="pull-right">
+                <tr>
+                    <td>
+                        <img src="~/Content/images/list_calendar.png" class="advisoryicon pull-left mrgbtm" />
+                        <br /><br />
+                    </td>
+                    <td>
+                        <div>&nbsp;{{CropAdvisoryDetails.CreatedDate}}</div>
+                        <br />
+                    </td>
+                </tr>
+                <tr>
+            <td>
+                <img src="~/Content/images/category.png" class="advisoryicon pull-left" />
+            </td>
+            <td> <div>&nbsp;{{CropAdvisoryDetails.Category}}</div></td>
+        </tr>
+            </table>*@
+                                        </div>
+                                    </div>
+                                    <div class="colorscheme brdrbtmdtl mrgbtm lblfontsize">
+                                        @Resource.SMSText
+                                    </div>
+                                    <div class="mrgleft">
+                                        <span>
+                                            {{CropAdvisoryDetails.BriefText}}
+                                        </span>
+                                    </div>
+
+                                    <br />
+                                    <div class="colorscheme brdrbtmdtl mrgbtm lblfontsize">@Resource.Recommendations</div>
+                                    <div class="mrgleft"><span class="contentwrap">{{CropAdvisoryDetails.Recommendations}}</span></div>
+                                    <div ng-hide="imagetag" class="row paddingtextleft">
+                                        <br />
+                                        <br />
+                                        <div class="mrgbtm"><span class="colorscheme lblfontsize">@Resource.Images</span></div>
+                                        <div ng-repeat="imageitem in Images" class="col-xs-2 col-sm-2 col-md-2">
+                                            <button type="button" class="btn btn-default btn-link" @*data-toggle="modal" data-target="#ImageModal"*@ ng-click="ViewImage(imageitem.ImagePath)">
+                                                <image src="{{imageitem.ThumbNailImageName}}" type="image/jpg" alt="" class="thumbimg"></image>
+                                            </button>
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <br />
+                                    <div class="row">
+                                        <div class="col-xs-pull-0 col-sm-pull-0 col-md-7">
+                                            <div ng-hide="audiotag" class="mrgbtm">
+                                                <span class="colorscheme lblfontsize">@Resource.Audio</span>
+                                            </div>
+                                            <div ng-hide="audiotag" ng-repeat="Audioitem in Audio">
+                                                <audio src="{{Audioitem.ImagePath}}" typeof="audio/mp3"></audio>
+                                                <audio controls>
+                                                    <source src="{{Audioitem.ImagePath}}" type="audio/ogg">
+                                                    <source src="{{Audioitem.ImagePath}}" type="audio/mpeg">
+                                                    <source src="{{Audioitem.ImagePath}}" type="audio/mp3">
+                                                    @Resource.NotSupport
+                                                </audio>
+                                            </div>
+                                            <br />
+                                        </div>
+                                    </div>
+                                    <br />
+                                    <iframe height="350" ng-src="{{trustSrc(CropAdvisoryDetails.YouTubeLink)}}" class="fillavailable" frameborder="0"></iframe>
+                                    <br />
+                                    <br />
+                                </div>
+                         <br />
+                    </div>
+                    <br />
+
+                    <br />
+                    <br />
+                </div>
+            </div>
+            <div class="modal fade" id="ImageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <button type="button" class="close" data-dismiss="modal"><span class="redcolor">  @Resource.Close </span><span class="redcolor"> &times;</span></button>
+                            <br />
+                            <br />
+                            <image src="{{Imageurl}}" alt="" class="fillavailable" style="height:500px"></image>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="imageModalCenterTitle" aria-hidden="true">
+                <div class="modal-dialog modal-dialog-centered modal-sm modaldialogs" role="document">
+                    <div class="modal-content">
+                        <div class="modal-body">
+                            <button type="button" class="close" data-dismiss="modal">
+                                <span class="redcolor">  @Resource.Close </span><span class="redcolor"> &times;</span>
+                            </button>
+                            <br />
+                            <br />
+                            <div class="text-center h4">@Resource.Nodatafound</div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+@section scripts {
+    <script>
+        var app = angular.module("viewFarmer", []);
+        app.controller("ViewDetailsController", function ($scope, $http)
+        {
+            $scope.Farmer = [];
+            $scope.FarmerDetails = {};
+            $scope.CAMById = [];
+            $scope.CAMByIdDetails = {};
+            $scope.Weather = [];
+            $scope.CropAdvisory = [];
+            $scope.CropAdvisoryById = [];
+            $scope.CropAdvisoryDetails = {};
+            $scope.DistrictMapping = [];
+            $scope.BlockMapping = [];
+            $scope.DistrictMapping = [];
+            $scope.BlockMapping = [];
+            $scope.CropMapping = [];
+            $scope.ImageAttachent = "Image";
+            $scope.AudioAttachent = "Audio";
+            $scope.Images = [];
+            $scope.Audio = [];
+            $scope.fblist = [];
+            $scope.FeedBack = {};
+            $scope.GetFarmerDetails = function ()
+            {
+                $http({
+                    method: 'POST',
+                    url: '@Url.Action("GetFarmerDetails", "Account")',
+                    headers: { 'Content-Type': "Application/Json" },
+                    data: { LogInId: "@LogInId", LogInPassword: "1234" }
+                }).then(function (response) {
+                    $scope.Farmer = response.data;
+                    $scope.FarmerDetails = $scope.Farmer[0];
+                    $scope.GetFeedbackById($scope.FarmerDetails.TypeOfRole);
+                },function (response) {
+                        alert("No result found");
+                    });
+            }
+            $scope.GetFeedbackById = function (UserProfileID) {
+                $http({
+                    method: 'POST',
+                    url: '@Url.Action("GetFeedbackById", "AGROMET")',
+                    headers: {
+                        'Content-Type': "Application/Json"
+                    },
+                    data: { CropAdvisoryID: "@CropAdvisoryID", LanguageName: "@LanguageName", UserProfileID: UserProfileID}
+                }).then(function (response) {
+                    $scope.fblist = response.data;
+                    $scope.FeedBack = $scope.fblist[0];
+                    console.log(response.data);
+                },
+                    function (response) {
+                        alert("No result found");
+                    });
+            }
+            $scope.GetCAMById = function ()
+            {
+                $http({
+                    method: 'POST',
+                    url: '@Url.Action("GetCAMById", "AGROMET")',
+                    headers: {
+                        'Content-Type': "Application/Json"
+                    },
+                    data: { CAMID: "@CAMID", LanguageName: "@LanguageName" }
+                }).then(function (response) {
+                    $scope.CAMById = response.data;
+                    $scope.CAMByIdDetails = $scope.CAMById[0];
+                    $scope.GetWeather($scope.CAMByIdDetails.CreatedDate);
+                    //$scope.GetCropAdvisoryByCAM(@CAMID);
+                    $scope.GetCropAdvisoryById(@CropAdvisoryID);
+                    $scope.GetDistrictMapping(@CropAdvisoryID);
+                    $scope.GetBlockMapping(@CropAdvisoryID);
+                    $scope.GetAttachmentMapping(@CropAdvisoryID, $scope.ImageAttachent);
+                    $scope.GetAttachmentMapping(@CropAdvisoryID, $scope.AudioAttachent);
+                    $scope.CropDetails = true;
+                    $scope.color = @CAMID;
+                },
+                    function (response) {
+                        alert("No result found");
+                    });
+            }
+             $scope.GetCropAdvisoryByCAM = function (CAMID) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetCropAdvOfCAMList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { CAMID: CAMID, LanguageName: "@LanguageName"}
+                }).then(function (response) {
+                    $scope.CropAdvisory = response.data;
+                    $scope.TotalAdvisory = $scope.CropAdvisory.length;
+                    if ($scope.CropAdvisory.length > 0) {
+                        $scope.GetCropAdvisoryById($scope.CropAdvisory[0].CropAdvisoryID);
+                        $scope.GetDistrictMapping($scope.CropAdvisory[0].CropAdvisoryID);
+                        $scope.GetBlockMapping($scope.CropAdvisory[0].CropAdvisoryID);
+                        $scope.GetAttachmentMapping($scope.CropAdvisory[0].CropAdvisoryID, $scope.ImageAttachent);
+                        $scope.GetAttachmentMapping($scope.CropAdvisory[0].CropAdvisoryID, $scope.AudioAttachent);
+                        $scope.CropDetails = true;
+                     
+                    }
+                    else {
+                        $scope.CropDetails = false;
+                        
+                    }
+                },
+                function (response) {
+                    $('#errorModal').modal();
+                });
+            }
+            $scope.GetCropAdvisoryById = function (CropAdvisoryID) {
+                $http({
+                    method: 'POST',
+                    url: '@Url.Action("GetCropAdvisoryById", "AGROMET")',
+                    headers: {
+                        'Content-Type': "Application/Json"
+                    },
+                    data: { CropAdvisoryID: CropAdvisoryID, LanguageName: "@LanguageName" }
+                }).then(function (response) {
+                    $scope.CropAdvisoryById = response.data;
+                    $scope.CropAdvisoryDetails = $scope.CropAdvisoryById[0];
+                    $scope.cropcolor = CropAdvisoryID;
+                },
+                    function (response) {
+                        alert("No result found");
+                    });
+            }
+            $scope.GetDistrictMapping = function (CropAdvisoryID) {
+                $http({
+                    method: 'POST',
+                    url: '@Url.Action("GetCropAdvisoryDistrictMapping", "AGROMET")',
+                    headers: {
+                        'Content-Type': "Application/Json"
+                    },
+                    data: { CropAdvisoryID: CropAdvisoryID, LanguageName: "@LanguageName" }
+                }).then(function (response) {
+                    $scope.DistrictMapping = response.data;
+                    if (response.data.length == 0) {
+                        $scope.districttag = true;
+                    }
+                    else {
+                        $scope.districttag = false;
+                    }
+                },
+                    function (response) {
+                        alert("No result found");
+                    });
+            }
+            $scope.GetBlockMapping = function (CropAdvisoryID) {
+                $http({
+                    method: 'POST',
+                    url: '@Url.Action("GetCropAdvisoryBlockMapping", "AGROMET")',
+                    headers: {
+                        'Content-Type': "Application/Json"
+                    },
+                    data: { CropAdvisoryID: CropAdvisoryID, LanguageName: "@LanguageName" }
+                }).then(function (response) {
+                    $scope.BlockMapping = response.data;
+                    if (response.data.length == 0) {
+                        $scope.blocktag = true;
+                    }
+                    else {
+                        $scope.blocktag = false;
+                    }
+                },
+                    function (response) {
+                        alert("No result found");
+                    });
+            }
+             $scope.GetAttachmentMapping = function (CropAdvisoryID,Type) {
+                 $http({
+                     method: 'POST',
+                     url: '@Url.Action("GetCropAdvisoryAttachmentMapping", "AGROMET")',
+                     headers: {
+                         'Content-Type': "Application/Json"
+                     },
+                     data: { CropAdvisoryID: CropAdvisoryID, LanguageName: "@LanguageName", Type: Type }
+                 }).then(function (response) {
+                     if (Type == "Image") {
+                         $scope.Images = response.data;
+                         if (response.data.length == 0) {
+                             $scope.imagetag = true;
+                         }
+                         else {
+                             $scope.imagetag = false;
+                         }
+                     }
+                     if (Type == "Audio") {
+                         $scope.Audio = response.data;
+                         if (response.data.length == 0) {
+                             $scope.audiotag = true;
+                         }
+                         else {
+                             $scope.audiotag = false;
+                         }
+                     }
+                 },
+                     function (response) {
+                         alert("No result found");
+                     });
+            //$('#AdvisoryModal').modal();
+            $scope.AdvisoryDetails = true;
+            }
+            $scope.GetWeather = function (date)
+            {
+                $scope.msg = false;
+
+                $http({
+                    method: 'POST',
+                    url: '@Url.Action("GetWeatherList", "AGROMET")',
+                    headers: {
+                        'Content-Type': "Application/Json"
+                    },
+                    data: { StateID: @StateID, DistrictID: @DistrictID, BlockID: @BlockID , LanguageType: "@LanguageName", WeatherDate: date }
+                }).then(function (response) {
+                    $scope.Weather = response.data;
+                    if ($scope.Weather.length == 0) {
+                        $scope.NextFour = [];
+                        $scope.current = [];
+                        $scope.msg = true;
+                        $scope.weathertag = true;
+                    }
+                    else {
+                        $scope.current = $scope.Weather[0];
+                        $scope.NextFour = [];
+                        if ($scope.CAMByIdDetails.D1) {
+                            $scope.NextFour.push($scope.Weather[0]);
+                            if ($scope.CAMByIdDetails.D2) {
+                                $scope.NextFour.push($scope.Weather[1]);
+                                if ($scope.CAMByIdDetails.D3) {
+                                    $scope.NextFour.push($scope.Weather[2]);
+                                    if ($scope.CAMByIdDetails.D4) {
+                                        $scope.NextFour.push($scope.Weather[3]);
+                                        if ($scope.CAMByIdDetails.D5) {
+                                            $scope.NextFour.push($scope.Weather[4]);
+                                        }
+                                    }
+                                }
+                            }
+                        }
+
+
+                        $scope.msg = false;
+                        $scope.weathertag = false;
+                    }
+                },
+                    function (response) {
+                        $scope.msg = true;
+                        $scope.weathertag = true;
+                    });
+            }
+            $scope.ViewImage = function (ImagePath) {
+                $scope.Imageurl = ImagePath;
+                $('#ImageModal').modal();
+            }
+            
+        });
+    </script>
+}

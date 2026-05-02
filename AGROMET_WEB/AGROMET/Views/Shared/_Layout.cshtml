@@ -1,0 +1,97 @@
+﻿@using Resources
+@{ 
+    var name = "";
+    var rolename = "";
+    var roleid = "";
+    var Image = "";
+    var imgdata = "data:image/jpg;base64,";
+    if (Request.Cookies["Name"] != null)
+    {
+        name = Request.Cookies["Name"].Value;
+    }
+    if (Request.Cookies["RoleId"] != null)
+    {
+        roleid = Request.Cookies["RoleId"].Value;
+    }
+    if (Request.Cookies["RoleName"] != null)
+    {
+        rolename = Request.Cookies["RoleName"].Value;
+    }
+    if (Request.Cookies["Image"] != null)
+    {
+        Image = imgdata + Request.Cookies["Image"].Value;
+    }
+}
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="shortcut icon" href="~/favicon.ico" type="image/x-icon" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#3b5998" />
+    <meta name="Description" content="AGROMET Solution">
+    <title>@ViewBag.Title - @Resource.AGROMET</title>
+
+    <link href='@Scripts.Url("~/Content/css")' rel="stylesheet" async />
+    <script src='@Scripts.Url("~/bundles/modernizr")' async></script>
+</head>
+<body>
+    <div class="body-content">
+        <div class="row">
+            <div class="col-xs-3 col-sm-4 col-md-4">
+                <div><div><a href="@Url.Action("Home","AGROMET")"><img src="~/Content/images/Ministry-of-Earth-Sciences.jpg" type="image/png" alt="Ministry of Earth Sciences" class="imglogo" /></a></div></div>
+            </div>
+            <div class="col-xs-4 col-sm-4 col-md-4 text-center paddingfix">
+                <h2 class="hidden-xs colorscheme">@Resource.AGROMET</h2>
+                <h3 class="hidden-sm hidden-md hidden-lg colorscheme">@Resource.AGROMET</h3>
+            </div>
+            <div class="col-xs-5 col-sm-4 col-md-4 text-right paddingfix">
+                <div class="chip">
+                    <img src="@Image" alt="" />
+                    @name
+                </div>
+                <div class="rolename">@rolename</div>
+            </div>
+        </div>
+    </div>
+    <div class="navbar navbar-inverse">
+        <div class="navbar-header">
+            <button type="button" class="navbar-toggle" data-toggle="collapse" data-target="#agrometnavbar">
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+                <span class="icon-bar"></span>
+            </button>
+        </div>
+        <div class="navbar-collapse collapse" id="agrometnavbar">
+            <ul class="nav navbar-nav">
+                <li id="dashboard">@Html.ActionLink(Resource.DashBoard, "DashBoard", "AGROMET")</li>
+                @*<li id="home">@Html.ActionLink(Resource.Weather, "Weather", "AGROMET")</li>
+                <li id="cropadvisory">@Html.ActionLink(Resource.Advisory, "CropAdvisory", "AGROMET")</li>
+        <li id="notifications">@Html.ActionLink(Resource.Alerts, "Notifications", "AGROMET")</li>*@
+
+                @*<li id="surveys">@Html.ActionLink(Resource.Surveys, "Surveys", "AGROMET")</li>
+        @if (@roleid == "3")
+        {
+            <li id="users">@Html.ActionLink(Resource.Users, "Users", "AGROMET")</li>
+        }*@
+            </ul>
+            <ul class="nav navbar-nav pull-right">
+                <li>@Html.ActionLink(Resource.Logout, "Logout", "Account")
+                @*<img src="~/Content/images/logout.png" alt="" class="imgweatherdetailsm pull-right" />*@
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="body-content">
+        <script src='@Scripts.Url("~/bundles/jquery")'></script>
+        
+        @Scripts.Render("~/bundles/angular")
+        @RenderBody()
+        @*<hr />
+        <footer>
+            <p>&copy; @DateTime.Now.Year - My ASP.NET Application</p>
+        </footer>*@
+    </div>
+    @RenderSection("scripts", required: false)
+</body>
+</html>

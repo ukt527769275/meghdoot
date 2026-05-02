@@ -1,0 +1,698 @@
+﻿body {
+    padding-top: 3px;
+    padding-bottom: 3px;
+    font-family: 'Calibri';
+    font-size: 14px;
+}
+
+/* Set padding to keep content from hitting the edges */
+.body-content {
+    padding-left: 2%;
+    padding-right: 2%;
+}
+
+/* Override the default bootstrap behavior where horizontal description lists 
+   will truncate terms that are too long to fit in the left column 
+*/
+.dl-horizontal dt {
+    white-space: normal;
+}
+
+/* Set width on the form input elements since they're 100% wide by default */
+
+.imglogo {
+    max-height:70px;
+    margin-bottom:5px;
+}
+.chip {
+    display: inline-block;
+    height: 70px;
+    line-height: 60px;
+    font-size:large;
+}
+
+    .chip img {
+        height: 70px;
+        width: 70px;
+        border-radius: 50%;
+        float: right;
+    }
+.rolename {
+    font-size: small;
+    font-weight: 200;
+    margin-top: -25px;
+    margin-right: 70px;
+}
+.paddingfix {
+    padding-right: initial;
+    padding-left: initial;
+}
+.paddingrightfix {
+    padding-right: initial;
+}
+
+.paddingleftfix {
+    padding-left: initial;
+}
+
+.paddingtopspace{
+    padding-top:7px;
+}
+.paddingleftspace{
+    padding-left:1%;
+}
+.paddingtitlespace {
+    padding-left: 5%;
+    padding-right: 5%;
+}
+.paddingtitleadvspace {
+    padding-left: 2%;
+    padding-right: 2%;
+}
+.paddinguserspace {
+    padding-left: 2%;
+    padding-right: 2%;
+}
+.namefix {
+    margin-top: 30px;
+}
+
+.form {
+max-width: 350px;
+margin-left: auto;
+margin-right: auto;
+display: block;
+background: #FFFFFF;
+}
+    .form .forms-control {
+        outline: 0;
+        background: #ffffff;
+        padding-left: 15px;
+        display: block;
+        width: 80%;
+        border: 1px solid #025A32;
+        border-radius: 10px;
+        margin-left: auto;
+        margin-right: auto;
+        height: 50px;
+        box-sizing: border-box;
+        font-size: 14px;
+    }
+    .form .btn-default {
+        border-color: #025A32;
+        color: #025A32;
+        background-color: white;
+        border-radius: 10px;
+        display: block;
+        margin-left: auto;
+        margin-right: auto;
+        width: 35%;
+        height: 35px;
+        font-size: 15px;
+        font-weight: bold;
+    }
+.form .img-disp-cls {
+    
+    height: 30%;
+    display: block;
+    margin-left: auto;
+    margin-right: auto;
+}
+.navbar-inverse {
+    background-color: #025A32;
+    border-color: #025A32;
+}
+.navbar {
+    border-radius: 0px;
+    border: none;
+    min-height: 30px !important;
+    padding-left: 1%;
+}
+.navbar-inverse .navbar-nav > li > a {
+    color: white;
+    font-weight: bold !important;
+    font-size: medium !important;
+}
+.navbar-nav > li > a {
+    padding:5px 30px;
+    color:white;
+    font-weight:bold !important;
+    font-size:medium !important;
+}
+.navbar-inverse .navbar-nav > li > a:hover, .navbar-inverse .navbar-nav > li > a:focus {
+    color: black;
+    background-color: #a4d89a;
+}
+.imgweather{
+
+    max-height:130px;
+}
+.imgweathersm {
+    max-height:40px;
+}
+.colorscheme{
+    color:#025A32;
+}
+.colorbackscheme {
+    background-color:#025A32;
+    color:white;
+}
+.colorbrdrscheme {
+    border-color: #025A32;
+}
+.colorgrayscheme {
+    color:#555;
+}
+.advlist:focus {
+    border-color: #025A32;
+}
+.advlist:hover {
+    border-color: #025A32;
+}
+.advlist {
+    margin-left: initial;
+}
+.imgweatherdetail{
+    max-height:22px;
+}
+.imgweatherdetailsm {
+    max-height: 15px;
+}
+.tempiconbig {
+    max-height: 30px;
+}
+.tempicon {
+    max-height: 20px;
+    margin-left:initial;
+}
+.weatherdetailtxt {
+    font-weight: 400;
+    font-size: medium;
+
+}
+.weatherdetailtxtsm {
+    font-size: 14px;
+
+}
+.weatherdetailtxtblk {
+ font-size:16px;
+ font-weight:400;
+}
+.prenxtbtn{
+    background-color:white;
+    border:none;
+    font-size:25px;
+    color:#025A32;
+}
+.mrgbtm{
+    margin-bottom:6px;
+}
+.brdrbtmdtl {
+   
+    border-bottom: 1px solid lightgray;
+}
+.mrgtitle {
+    margin-bottom: 4px;
+    margin-top:4px;
+}
+.mrgbtmimg {
+    margin-bottom: 12px;
+}
+.mrgtopbtm{
+    margin:10px 0px 10px 0px;
+}
+.today {
+    font-size: 17px;
+    margin-top: 6px;
+}
+.tempdisp {
+    font-size: 25px;
+}
+.brdrbtm {
+    border-bottom: 1px solid lightgray;
+}
+.brdrrite {
+    border-right: 1px solid lightgray;
+}
+.brdrriteusers {
+    border-right: 1px solid silver;
+}
+.brdruserbtm {
+    border-bottom: 1px solid silver;
+    padding-top:5px;
+}
+.rolenamefix {
+    text-align: right;
+    font-size: 12px;
+}
+.mrgtopdt {
+    margin-top: 4px;
+}
+.mrgtoprain{
+    margin-top:-4px;
+}
+.mrgtopwind {
+    margin-top: -2px;
+}
+.bottombox {
+    border: 1px solid silver;
+    margin-right: 20px;
+    border-radius: 5px;
+}
+.bottomboxadv {
+    border: 1px solid silver;
+    border-radius: 5px;
+    padding-left: 10px;
+}
+.col-half-offset {
+    margin-left: 2.166666667%
+}
+.scrollstyle {
+    max-height: 110px;
+    overflow-y: scroll;
+    overflow: auto
+}
+.scrollstyleright {
+    max-height: 250px;
+    overflow-y: scroll;
+    overflow: auto
+}
+.lblside{
+    font-weight: normal !important;
+}
+.ddlstate {
+    width: 100%;
+    height: 30px;
+    border-color: lightgray;
+    border-radius:5px;
+}
+.ddlcategory {
+    width: 90%;
+    height: 30px;
+    border-color: lightgray;
+    border-radius: 5px;
+}
+.frgtpin {
+    height: 30px;
+    width:100%;
+    border:1px solid lightgray;
+    border-radius: 5px;
+}
+.pinlink{
+    margin-left:70%;
+}
+.strtg{
+    width:90px;
+    height:17px;
+}
+.tbl {
+    font-size: 16px !important;
+}
+.imgchk {
+    height: 15px;
+}
+.title {
+    width: 100%;
+    height: 60px;
+    border-color: lightgray;
+    border-radius:5px;
+}
+.titleadv {
+    width: 100%;
+    height: 82px;
+    border-color: gray;
+    border-color: lightgray;
+    border-radius: 5px;
+}
+.weatherbox {
+    width: 95.5%;
+    height: 100px;
+    border-color: lightgray;
+    border-radius: 5px;
+}
+.recommendation {
+    width: 100%;
+    height: 110px;
+    border-color: lightgray;
+    border-radius: 5px;
+}
+.completemsg {
+    width: 100%;
+    height: 150px;
+    border-color: lightgray;
+    border-radius: 5px;
+}
+.optiontitle {
+    width: 100%;
+    height: 120px;
+    border-color: lightgray;
+    border-radius: 5px;
+}
+.profileheading {
+    font-weight: bold;
+    font-size: larger;
+}
+.profileimg {
+    max-width: 80px;
+    max-height: 80px;
+    border-radius: 50%;
+}
+.view_profile_sec {
+    max-width: 550px;
+    margin-left: auto;
+    margin-right: auto;
+    display: block;
+}
+.view_profile_sec div.brd_bt {
+    display: inline-block;
+    width: 100%;
+    border-bottom: solid 1px #f2efef;
+    padding: 4px;
+}
+.view_profile_sec div label.col-md-6.col-sm-6 {
+    padding-left: initial;
+}
+.view_profile_sec > div span {
+    color: #025A32;
+    text-align: right;
+}
+.rightchk {
+    min-height: 440px;
+}
+.thumb {
+    width: 60px;
+    height: 60px;
+    margin: 0.2em -0.7em 0 0;
+}
+.thumbimg {
+    width: 80px;
+    height: 80px;
+}
+.wdtdt{
+    margin-right:26%;
+}
+.advisoryinfo {
+    border: 1px solid #025A32;
+}
+.paddingdate{
+    padding-left:20%;
+    padding-right:14%;
+}
+.txttitle{
+    color:white;
+}
+.searchbox{
+    width:100%;
+    height:30px;
+}
+.widthfit{
+   min-width:100%;
+}
+.fillavailable {
+    width: 100%;
+}
+.boxht {
+    height: 30px;
+}
+.advtxtsize{
+    font-size:12px;
+}
+.lblcount {
+    color: white;
+    background-color: #025A32;
+    border-radius: 5px;
+    margin-bottom: 5px;
+    padding-left: 10px;
+    padding-right:10px;
+    text-align:center;
+}
+.paddingtextleft{
+    padding-left:13px;
+}
+.paddingtxtleft {
+    padding-left: 8px;
+}
+.userimgtag{
+    min-height:150px;
+}
+.imguser {
+    width: 100px;
+    height: 100px;
+}
+#adv:hover {
+    color: black;
+    background-color: #a4d89a;
+}
+#adv:focus {
+    color: black;
+    background-color: #a4d89a;
+}
+.btnhover:hover {
+    color: black;
+    background-color: #a4d89a;
+}
+
+.btnhover:focus {
+    color: black;
+    background-color: #a4d89a;
+}
+.nodata{
+    margin-left:auto;
+    margin-right:auto;
+    width:100%;
+}
+.AdvisoryDetailspanel {
+    max-height: 680px;
+    overflow-y: scroll;
+    overflow: auto;
+    margin-bottom: initial !important;
+}
+/* width */
+::-webkit-scrollbar {
+  width: 7px;
+}
+
+/* Track */
+::-webkit-scrollbar-track {
+  background: #f1f1f1; 
+  margin-left:3px;
+}
+ 
+/* Handle */
+::-webkit-scrollbar-thumb {
+  background: #c7c7c7; 
+}
+
+/* Handle on hover */
+    ::-webkit-scrollbar-thumb:hover {
+        background: #555;
+    }
+.countsize{
+    font-size:30px;
+    
+}
+.mrgrite{
+    margin-right:5px;
+    width:45%;
+}
+.mrgritecnt {
+    margin: 5px;
+}
+.wdt {
+    width: 45%;
+}
+.brdrrds{
+    border-radius:5px;
+}
+.brdrcircle {
+    border-radius: 50%;
+}
+.btnstl {
+    border-radius: 5px;
+    background-color: #f2f2f2;
+}
+.selectlst {
+    color: black;
+    background-color: #a4d89a !important;
+}
+.mrgleft {
+    margin-left: 20px;
+}
+.mrgleftchk {
+    margin-left: 10px;
+}
+.mrgleftcloud {
+    margin-left: 33px;
+}
+input[type="number"] {
+    -moz-appearance: textfield;
+    -webkit-appearance: textfield;
+}
+.contentwrap {
+    white-space: pre-wrap;
+}
+.txtadjust {
+    white-space: nowrap;
+    width: inherit;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    font-weight: bold;
+}
+.redcolor{
+    color:red;
+}
+.close {
+    opacity: initial;
+    font-size: 16px;
+}
+.advisoryicon {
+    max-height: 22px;
+}
+.advisoryviewicon {
+    max-height: 30px;
+}
+.advisorycropicon {
+    max-height: 25px;
+}
+.mrgbtmadvisory{
+margin-bottom:10px;
+}
+.lblfontsize{
+    font-size:16px;
+}
+i {
+    border: solid black;
+    border-width: 0 1px 1px 0;
+    display: inline-block;
+    padding: 3px;
+}
+.down {
+    transform: rotate(45deg);
+    -webkit-transform: rotate(45deg);
+}
+.paddingleftdt {
+    padding-left:8%;
+}
+.uline {
+    text-decoration: none !important;
+}
+.mrginitial{
+    margin-right:initial !important;
+}
+.mrgleftles{
+    margin-left:-20px;
+}
+.tempmrg {
+    margin-left: -8px;
+}
+.linkwdt {
+    width: 87%;
+    border:1px solid lightgray;
+    border-radius: 5px;
+}
+.modaldialogs {
+    transform: translate(0, -50%);
+    top: 45%;
+    margin: 0 auto;
+}
+.brdrlogin {
+    border-radius: 10px;
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12) !important;
+}
+.boxshado {
+    box-shadow: 0 2px 4px 0 rgba(0,0,0,0.16),0 2px 10px 0 rgba(0,0,0,0.12) !important;
+}
+.str{
+    color:red;
+}
+.widthlng {
+    min-width: 100%;
+    border-radius: 5px;
+    border-color: lightgray;
+    min-height:100px;
+}
+@media screen and (min-width :320px) and (max-width :992px) {
+    .row{
+        margin-right:5px;
+        margin-left:5px;
+    }
+    .imgweather {
+        max-height: 70px;
+    }
+    .imgweathersm {
+        max-height: 30px;
+    }
+    .imglogo {
+        max-height: 50px;
+        margin-bottom: 2px;
+    }
+    .bottombox {
+        border: 1px solid silver;
+        margin-right:6px;
+        margin-bottom:6px;
+        padding-right:5px;
+        border-radius: 5px;
+        width:48%;
+    }
+    .bottomboxadv {
+        border: 1px solid silver;
+        margin-right: 6px;
+        margin-bottom: 6px;
+        padding-right: 5px;
+        border-radius: 5px;
+        width: 48%;
+    }
+    .paddingtitlespace {
+        padding-left: 15px;
+        padding-right: 15px;
+    }
+    .body-content {
+        padding-left: initial;
+        padding-right: initial;
+    }
+    .thumbimg {
+        width: 50px;
+        height: 50px;
+    }
+    .paddingdate {
+        padding-left: initial;
+        padding-right: initial;
+    }
+    ol{
+        padding-left:15px;
+    }
+    .paddingtextleft {
+        padding-left: initial;
+        margin-left:initial;
+    }
+    .paddingtxtleftright{
+        padding-left:initial;
+        padding-right:initial;
+    }
+    .chip {
+        display: inline-block;
+        height: 50px;
+        line-height: 50px;
+        font-size: small;
+    }
+
+        .chip img {
+            height: 50px;
+            width: 50px;
+            border-radius: 50%;
+            float: right;
+            margin-top:6px;
+        }
+    .rolename {
+        font-size: x-small;
+        font-weight: 200;
+        margin-top: -18px;
+        margin-right: 50px;
+    }
+    .brdrrite {
+        border-right:none;
+    }
+    .paddingimg {
+        padding-left: 20px;
+    }
+}

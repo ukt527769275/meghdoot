@@ -1,0 +1,446 @@
+﻿@model AGROMET.Models.CropAdvisoryDetails
+@using Resources
+@{
+    ViewBag.Title = Resource.AdvisoryCategory;
+    var CAMID = Model.CAMID;
+    var CreatedDate = Model.CreatedDate;
+    var StateID = "";
+    var DistrictID = "";
+    var BlockID = "";
+    var TypeOfRole = "";
+    var LanguageName = "";
+    if (Request.Cookies["StateID"] != null)
+    {
+        StateID = Request.Cookies["StateID"].Value;
+    }
+    if (Request.Cookies["DistrictID"] != null)
+    {
+        DistrictID = Request.Cookies["DistrictID"].Value;
+    }
+    if (Request.Cookies["BlockID"] != null)
+    {
+        BlockID = Request.Cookies["BlockID"].Value;
+    }
+    if (Request.Cookies["TypeOfRole"] != null)
+    {
+        TypeOfRole = Request.Cookies["TypeOfRole"].Value.ToString();
+    }
+    if (Request.Cookies["LanguageName"] != null)
+    {
+        LanguageName = Request.Cookies["LanguageName"].Value.ToString();
+    }
+}
+<style>
+    #cropadvisory a {
+        color: black;
+        background-color: #a4d89a;
+    }
+</style>
+
+<div ng-app="cAmaster">
+    <div ng-controller="CaController">
+        <div class="ng-cloak">
+            <div class="row">
+                <div class="col-md-1">
+                    @Html.HiddenFor(model => model.DistrictList, new { id = "DistrictList" })
+                    @Html.HiddenFor(model => model.BlockList, new { id = "BlockList" })
+                    @Html.HiddenFor(model => model.StateID, new { id = "stateidss" })
+                    @Html.HiddenFor(model => model.ScientistID, new { id = "ScientistIdss", Value = @TypeOfRole })
+                    @Html.HiddenFor(model => model.LanguageType, new { id = "LanguageName", Value = @LanguageName })
+                </div>
+                <div class="col-md-10">
+                    <div class="row">
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <div class="mrgbtm colorscheme brdrbtmdtl"><b>@Resource.Title</b></div>
+                            <div class="mrgbtm">@Html.DisplayFor(m => m.Title, new { id = "titles", @class = "title" })</div>
+                        </div>
+                        <div class="col-xs-6 col-sm-6 col-md-6">
+                            <label class="colorscheme text-center">@Resource.Period</label>
+                            <br />
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6  col-md-6">
+                                    <div class="mrgbtm">
+                                        <label class="mrgbtm colorscheme">@Resource.StartDate</label>
+                                        <br />
+                                        @Html.DisplayFor(model => model.PeriodStartDate, new { id = "startdate" })
+
+                                    </div>
+                                </div>
+                                <div class="col-xs-6 col-sm-6  col-md-6">
+                                    <label class="mrgbtm colorscheme">@Resource.EndDate</label>
+                                    <br />
+                                    @Html.DisplayFor(model => model.PeriodEndDate, new { id = "enddate" })
+
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-xs-2 col-sm-2 col-md-2 col-half-offset bottomboxadv paddingrightfix">
+                            @if (Model.D1 == true)
+                            {
+                                <img src ="/Content/images/checked-checkbox.png" class="imgchk" />
+                            }
+                            else
+                            {
+                                <img src ="~/Content/images/checkbox-unchecked-md.png" class="imgchk" />
+                            }
+                            @*@Html.CheckBoxFor(m => m.D1, new { id = "dt1" })*@
+                        </div>
+                        <div class="col-xs-2 col-sm-2 col-md-2 col-half-offset bottomboxadv paddingrightfix">
+                            @if (Model.D2 == true)
+                            {
+                                <img src="~/Content/images/checked-checkbox.png" class="imgchk" />
+                            }
+                            else
+                            {
+                                <img src="~/Content/images/checkbox-unchecked-md.png" class="imgchk" />
+                            }
+                            @*@Html.CheckBoxFor(m => m.D2, new { id = "dt2" })*@
+                        </div>
+                        <div class="col-xs-2 col-sm-2 col-md-2 col-half-offset bottomboxadv paddingrightfix">
+                            @if (Model.D3 == true)
+                            {
+                            <img src="~/Content/images/checked-checkbox.png" class="imgchk" />
+                            }
+                            else
+                            {
+                                <img src="~/Content/images/checkbox-unchecked-md.png" class="imgchk" />
+                            }
+                            @*@Html.CheckBoxFor(m => m.D3, new { id = "dt3" })*@
+                        </div>
+                        <div class="col-xs-2 col-sm-2 col-md-2 col-half-offset bottomboxadv paddingrightfix">
+                            @if (Model.D4 == true)
+                            {
+                                <img src="~/Content/images/checked-checkbox.png" class="imgchk" />
+                            }
+                            else
+                            {
+                                <img src="~/Content/images/checkbox-unchecked-md.png" class="imgchk" />
+                            }
+                            @*@Html.CheckBoxFor(m => m.D4, new { id = "dt4" })*@
+                        </div>
+                        <div class="col-xs-2 col-sm-2 col-md-2 col-half-offset bottomboxadv paddingrightfix">
+                            @if (Model.D5 == true)
+                            {
+                                <img src="~/Content/images/checked-checkbox.png" class="imgchk" />
+                            }
+                            else
+                            {
+                                <img src="~/Content/images/checkbox-unchecked-md.png" class="imgchk" />
+                            }
+                            @*@Html.CheckBoxFor(m => m.D5, new { id = "dt5" })*@
+                        </div>
+                    </div>
+                    <div class="row" ng-hide="weathertag">
+                        <div class="col-xs-6 col-sm-2 col-md-2 col-half-offset bottomboxadv paddingrightfix boxshado" ng-repeat="item in Weather">
+                            <div class="weatherdetailtxtblk mrgtopbtm">{{item.ForeCastDate_Lang}}</div>
+                            <div class="col-xs-5 col-sm-5 col-md-5 paddingrightfix paddingleftfix">
+                                <img src="~/Content/images/few_clouds.png" alt="" class="imgweathersm mrgbtm" />
+                                <div class="weatherdetailtxtsm mrgbtmimg">
+                                    <br />
+                                    <img src="~/Content/images/temprature.png" alt="" class="imgweatherdetailsm tempmrg" />
+                                    {{current.TempMin}}
+                                </div>
+                                <div class="weatherdetailtxtsm">
+                                    <img src="~/Content/images/temprature.png" alt="" class="imgweatherdetailsm tempmrg" />
+                                    {{current.TempMax}}
+                                </div>
+                            </div>
+                            <div class="col-xs-7 col-sm-7 col-md-7 weatherdetailtxtsm paddingleftfix paddingrightfix">
+                                <div class="mrgbtmimg">
+                                    <img src="~/Content/images/rain.png" alt="" class="imgweatherdetailsm" />
+                                    &nbsp; {{item.Rainfall}}
+                                </div>
+                                <div class="mrgbtmimg">
+                                    <img src="~/Content/images/humadity.png" alt="" class="imgweatherdetailsm" />
+                                    &nbsp; {{item.HumidityI}} / {{current.HumidityII}}
+                                </div>
+                                <div class="mrgbtmimg">
+                                    <img src="~/Content/images/Wind_speed.png" alt="" class="imgweatherdetailsm" />
+                                    &nbsp; {{item.WindSpeed}}
+                                </div>
+                                <div class="mrgbtmimg">
+                                    <img src="~/Content/images/{{item.ImgDirection}}" alt="" class="imgweatherdetailsm" />
+                                    &nbsp; {{item.WindDirection}}
+                                </div>
+                            </div>
+                            <div class="weatherdetailtxtsm mrgbtmadvisory weatherdetailtxtblk">
+                                &emsp;&emsp;&emsp; {{item.Cloud}}
+                            </div>
+                        </div>
+                        <br class="hidden-sm hidden-md hidden-lg" />
+                    </div>
+                    <br />
+                    <div class="mrgbtm colorscheme brdrbtmdtl"><b>@Resource.WeatherCondition</b></div>
+                    <div class="mrgbtm">
+                        @Html.DisplayFor(m => m.WeatherCondition, new { id = "weathercondition", @class = "title" })
+                    </div>
+                    <br />
+                    <div class="mrgbtm colorscheme brdrbtmdtl"><b>@Resource.AgroAdvisoryDetails</b></div>
+                    <div class="mrgbtm">
+                        @Html.DisplayFor(m => m.AgroAdvisoryDetails, new { id = "agroadvisorydetails", @class = "recommendation" })
+                    </div>
+                    <br />
+                    
+                    <div class="row">
+                        <div class="col-xs-4 col-sm-4 col-md-4">
+                            <br />
+                            <br />
+                            <br />
+                            <div class="panel-group" id="accordion" ng-init="GetCAMDistrictMapping();GetCAMBlockMapping();">
+                                <div ng-hide="districttag" class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" class="uline">
+                                                @Resource.Districts <span class="pull-right"> <i class="arrow down"></i></span>
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse1" class="panel-collapse collapse">
+                                        <ul class="list-group">
+                                            <li class="list-group-item" ng-repeat="Districtitem in DistrictMapping">
+                                                {{Districtitem.DistictName}}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div ng-hide="blocktag" class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" class="uline">
+                                                @Resource.Blocks <span class="pull-right"> <i class="arrow down"></i></span>
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse2" class="panel-collapse collapse">
+                                        <ul class="list-group">
+                                            <li class="list-group-item" ng-repeat="Blockitem in BlockMapping">
+                                                {{Blockitem.BlockName}}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="col-xs-3 col-sm-3 col-md-3">
+
+                        </div>
+                        <div class="col-xs-5 col-sm-5 col-md-5">
+                            <div class="row">
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+
+                                </div>
+                                <div class="col-xs-6 col-sm-6 col-md-6">
+                                    <div class="col-xs-6 col-sm-6 col-md-6">
+                                        <a href="@Url.Action("AddAdvisory", "AGROMET", new {CAMID = Model.CAMID})">
+                                            <input type="button" value="@Resource.AddAdvisory" class=" pull-right btn btn-md colorbackscheme btnhover" />
+                                        </a>
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6">
+                                        <a href="@Url.Action("CropAdvisory", "AGROMET")">
+                                            <input type="button" value="@Resource.Cancel" class=" pull-right btn btn-default btn-md colorscheme colorbrdrscheme btnhover" />
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                            <br />
+                            <div class="row">
+                                <div class="AdvisoryDetailspanel col-xs-push-0 col-sm-pull-0 col-md-pull-0" ng-init="GetCropAdvisory()">
+                                    <div class="mrgbtm colorscheme advlist" ng-repeat="item in CropAdvisory | filter:Search">
+                                        <div class="text-left fillavailable paddingtextleft btnstl">
+                                            <div class="mrgbtmadvisory txtadjust">
+                                                {{item.Title}}
+                                            </div>
+                                            <div class="row mrgbtmadvisory mrginitial">
+                                                <div class="col-xs-6 col-sm-6 col-md-7 paddingrightfix colorgrayscheme">
+                                                    <span class="paddingtextleft">
+                                                        {{item.State}}
+                                                    </span>
+                                                    <img src="~/Content/images/Geo_New.png" class="advisoryicon pull-left" />
+                                                </div>
+                                                <div class="col-xs-6 col-sm-6 col-md-5 colorgrayscheme">
+                                                    <span class="paddingtextleft">
+                                                        {{item.CreatedDate}}
+                                                    </span>
+                                                    <img src="~/Content/images/list_calendar.png" class="advisoryicon pull-left">
+                                                </div>
+                                            </div>
+                                            <div class="row mrgbtmadvisory mrginitial">
+                                                <div class="col-xs-6 col-sm-6 col-md-7 colorgrayscheme">
+                                                    <table>
+                                                        <tr>
+                                                            <td>
+                                                                <img src="~/Content/images/list_crop.png" alt="" class="advisoryicon pull-left" />
+                                                            </td>
+                                                            <td>
+                                                                <div class="paddingtextleft">
+                                                                    {{item.CropName}}
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                                <div class="col-xs-6 col-sm-6 col-md-5 paddingrightfix colorgrayscheme mrgbtm">
+                                                    <table>
+                                                        <tr>
+                                                            <td>
+                                                                <img src="~/Content/images/category.png" class="advisoryicon pullleft" />
+                                                            </td>
+                                                            <td>
+                                                                <div class="paddingtextleft">
+                                                                    {{item.Category}}
+                                                                </div>
+                                                            </td>
+                                                        </tr>
+                                                    </table>
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+
+
+
+                    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="imageModalCenterTitle" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered modal-sm modaldialogs" role="document">
+                            <div class="modal-content">
+                                <div class="modal-body">
+                                    <button type="button" class="close" data-dismiss="modal">
+                                        <span class="redcolor">  @Resource.Close </span><span class="redcolor"> &times;</span>
+                                    </button>
+                                    <br />
+                                    <br />
+                                    <div class="text-center h4">@Resource.Nodatafound</div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+@section scripts {
+    <script>
+        var app = angular.module("cAmaster", []);
+        app.controller("CaController", function ($scope, $http) {
+        $scope.State = [];
+        $scope.District = [];
+        $scope.Block = [];
+        $scope.Crop = [];
+        $scope.Language = [];
+        $scope.Weather = [];
+        $scope.current = [];
+        $scope.NextFour = [];
+        $scope.DistrictMapping = [];
+        $scope.BlockMapping = [];
+        $scope.GetWeather = function () {
+        $scope.msg = false;
+
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetWeatherList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { StateID: @StateID, DistrictID: @DistrictID, BlockID: @BlockID , LanguageType: "@LanguageName", WeatherDate: "@CreatedDate" }
+            }).then(function (response) {
+                $scope.Weather = response.data;
+                if ($scope.Weather.length == 0) {
+                    $scope.NextFour = [];
+                    $scope.current = [];
+                    $scope.msg = true;
+                    $scope.weathertag = true;
+                }
+                else {
+                    $scope.current = $scope.Weather[0];
+                    $scope.NextFour = [];
+                    for (var i = 1; i < $scope.Weather.length; i++) {
+                        $scope.NextFour.push($scope.Weather[i]);
+                        $scope.msg = false;
+                        $scope.weathertag = false;
+                    }
+                }
+            },
+            function (response) {
+                $scope.msg = true;
+                $scope.weathertag = true;
+            });
+            }
+             $scope.GetCropAdvisory = function () {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetCropAdvOfCAMList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { CAMID: @CAMID, LanguageName: "@LanguageName"}
+                }).then(function (response) {
+                    $scope.CropAdvisory = response.data;
+                    $scope.TotalAdvisory = $scope.CropAdvisory.length;
+                    if ($scope.CropAdvisory.length > 0) {
+                        $scope.AdvisoryDetails = true;
+                    }
+                    else {
+                        $scope.AdvisoryDetails = false;
+                        //$('#errorModal').modal();
+                    }
+                },
+                function (response) {
+                   // $('#errorModal').modal();
+                });
+            }
+            $scope.GetCAMDistrictMapping = function () {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetCAMDistrictMapping", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { CropAdvisoryID: @CAMID, LanguageName: "@LanguageName"}
+                }).then(function (response) {
+                    $scope.DistrictMapping = response.data;
+                    if (response.data.length == 0) {
+                        $scope.districttag = true;
+                    }
+                    else {
+                        $scope.districttag = false;
+                    }
+                },
+                function (response) {
+                    alert("No result found");
+                });
+        }
+            $scope.GetCAMBlockMapping = function () {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetCAMBlockMapping", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { CropAdvisoryID: @CAMID, LanguageName: "@LanguageName"}
+                }).then(function (response) {
+                    $scope.BlockMapping = response.data;
+                    if (response.data.length == 0) {
+                        $scope.blocktag = true;
+                    }
+                    else {
+                        $scope.blocktag = false;
+                    }
+                },
+                function (response) {
+                    alert("No result found");
+                });
+            }
+            $scope.GetWeather();
+        });
+
+    </script>
+
+}

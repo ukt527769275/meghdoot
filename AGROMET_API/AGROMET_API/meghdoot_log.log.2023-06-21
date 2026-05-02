@@ -1,0 +1,73 @@
+2021-02-23 17:35:50,936 INFO adding parameter value to SP param in ExecuteOutIDParameter service in sql helper 
+2021-02-23 17:35:50,946 INFO exceuting  ExecuteNonQuery in ExecuteOutIDParameter service in sql helper 
+2021-02-23 17:35:50,952 INFO closing resources in ExecuteOutIDParameter service in sql helper 
+2021-02-23 17:35:50,952 INFO ending ExecuteOutIDParameter service in sql helper 
+2021-02-23 17:35:50,952 INFO called ExecuteOutIDParameter in SaveCropAdvisory Service cropadvisory service
+2021-02-23 17:35:50,952 INFO calling SaveCropAdvisoryDistrict in SaveCropAdvisory Service cropadvisory service
+2021-02-23 17:35:50,953 INFO calling SaveCropAdvisoryDistrict in SaveCropAdvisory Service cropadvisory service
+2021-02-23 17:35:50,953 INFO calling ExecuteOutIDParameter in SaveCropAdvisoryDistrict in SaveCropAdvisory Service cropadvisory service
+2021-02-23 17:35:50,953 INFO starting ExecuteOutIDParameter service in sql helper 
+2021-02-23 17:35:50,953 INFO adding parameter value to SP param in ExecuteOutIDParameter service in sql helper 
+2021-02-23 17:35:50,953 INFO exceuting  ExecuteNonQuery in ExecuteOutIDParameter service in sql helper 
+2021-02-23 17:35:50,956 INFO closing resources in ExecuteOutIDParameter service in sql helper 
+2021-02-23 17:35:50,956 INFO ending ExecuteOutIDParameter service in sql helper 
+2021-02-23 17:35:50,956 INFO called ExecuteOutIDParameter in SaveCropAdvisoryDistrict in SaveCropAdvisory Service cropadvisory service
+2021-02-23 17:35:50,956 INFO ended  SaveCropAdvisoryDistrict in SaveCropAdvisory Service cropadvisory service
+2021-02-23 17:35:50,956 INFO called SaveCropAdvisoryDistrict in SaveCropAdvisory Service cropadvisory service
+2021-02-23 17:35:50,956 INFO ended SaveCropAdvisory Service cropadvisory service
+2021-02-23 17:35:50,956 INFO called SaveCropAdvisory of GetAdvisoryByStateId36_37FromIMD  Crop advisory for station id :  36
+2021-02-23 17:35:50,956 INFO calling SaveCropAdvisoryMasters of GetAdvisoryByStateId36_37FromIMD  Crop advisory for station id :  36
+2021-02-23 17:35:50,956 INFO starting SaveCropAdvisoryMasters Service cropadvisory service
+2021-02-23 17:35:50,957 INFO starting ExecuteOutIDParameter in SaveCropAdvisoryMasters  Service cropadvisory service
+2021-02-23 17:35:50,957 INFO starting ExecuteOutIDParameter service in sql helper 
+2021-02-23 17:35:50,957 INFO adding parameter value to SP param in ExecuteOutIDParameter service in sql helper 
+2021-02-23 17:35:50,957 INFO exceuting  ExecuteNonQuery in ExecuteOutIDParameter service in sql helper 
+2021-02-23 17:35:51,013 INFO closing resources in ExecuteOutIDParameter service in sql helper 
+2021-02-23 17:35:51,013 INFO ending ExecuteOutIDParameter service in sql helper 
+2021-02-23 17:35:51,013 INFO complete ExecuteOutIDParameter in SaveCropAdvisoryMasters  Service cropadvisory service
+2021-02-23 17:35:51,013 INFO starting SaveCropAdvisoryDistrictMaster in SaveCropAdvisoryMasters  Service cropadvisory service
+2021-02-23 17:35:51,013 INFO starting SaveCropAdvisoryDistrictMaster 
+2021-02-23 17:35:51,013 INFO calling ExecuteOutIDParameter in SaveCropAdvisoryDistrictMaster 
+2021-02-23 17:35:51,013 INFO starting ExecuteOutIDParameter service in sql helper 
+2021-02-23 17:35:51,014 INFO adding parameter value to SP param in ExecuteOutIDParameter service in sql helper 
+2021-02-23 17:35:51,014 INFO exceuting  ExecuteNonQuery in ExecuteOutIDParameter service in sql helper 
+2021-02-23 17:35:51,020 INFO closing resources in ExecuteOutIDParameter service in sql helper 
+2021-02-23 17:35:51,020 INFO ending ExecuteOutIDParameter service in sql helper 
+2021-02-23 17:35:51,020 INFO called ExecuteOutIDParameter in SaveCropAdvisoryDistrictMaster 
+2021-02-23 17:35:51,020 INFO ending  SaveCropAdvisoryDistrictMaster 
+2021-02-23 17:35:51,020 INFO starting SaveCropAdvisoryDistrictMaster in SaveCropAdvisoryMasters  Service cropadvisory service
+2021-02-23 17:35:51,020 INFO ending SaveCropAdvisoryMasters  Service cropadvisory service
+2021-02-23 17:35:51,020 INFO called SaveCropAdvisoryMasters of GetAdvisoryByStateId36_37FromIMD  Crop advisory for station id :  36
+2021-02-23 17:35:51,021 INFO calling SaveCropAdvisory of GetAdvisoryByStateId36_37FromIMD  Crop advisory for station id :  36
+2021-02-23 17:35:51,021 INFO starting SaveCropAdvisory Service cropadvisory service
+2021-02-23 17:35:51,021 INFO calling ExecuteOutIDParameter in SaveCropAdvisory Service cropadvisory service
+2021-02-23 17:35:51,021 INFO starting ExecuteOutIDParameter service in sql helper 
+2021-02-23 17:35:51,021 INFO adding parameter value to SP param in ExecuteOutIDParameter service in sql helper 
+2021-02-23 17:35:51,021 INFO exceuting  ExecuteNonQuery in ExecuteOutIDParameter service in sql helper 
+2021-02-23 17:35:51,029 INFO closing resources in ExecuteOutIDParameter service in sql helper 
+2021-02-23 17:35:51,029 INFO ending ExecuteOutIDParameter service in sql helper 
+2021-02-23 17:35:51,029 INFO called ExecuteOutIDParameter in SaveCropAdvisory Service cropadvisory service
+2021-02-23 17:35:51,029 INFO calling SaveCropAdvisoryDistrict in SaveCropAdvisory Service cropadvisory service
+2021-02-23 17:35:51,029 INFO calling SaveCropAdvisoryDistrict in SaveCropAdvisory Service cropadvisory service
+2021-02-23 17:35:51,029 INFO calling ExecuteOutIDParameter in SaveCropAdvisoryDistrict in SaveCropAdvisory Service cropadvisory service
+2021-02-23 17:35:51,029 INFO starting ExecuteOutIDParameter service in sql helper 
+2021-02-23 17:35:51,029 INFO adding parameter value to SP param in ExecuteOutIDParameter service in sql helper 
+2021-02-23 17:35:51,029 INFO exceuting  ExecuteNonQuery in ExecuteOutIDParameter service in sql helper 
+2021-02-23 17:35:51,035 INFO closing resources in ExecuteOutIDParameter service in sql helper 
+2021-02-23 17:35:51,035 INFO ending ExecuteOutIDParameter service in sql helper 
+2021-02-23 17:35:51,035 INFO called ExecuteOutIDParameter in SaveCropAdvisoryDistrict in SaveCropAdvisory Service cropadvisory service
+2021-02-23 17:35:51,035 INFO ended  SaveCropAdvisoryDistrict in SaveCropAdvisory Service cropadvisory service
+2021-02-23 17:35:51,035 INFO called SaveCropAdvisoryDistrict in SaveCropAdvisory Service cropadvisory service
+2021-02-23 17:35:51,035 INFO ended SaveCropAdvisory Service cropadvisory service
+2021-02-23 17:35:51,035 INFO called SaveCropAdvisory of GetAdvisoryByStateId36_37FromIMD  Crop advisory for station id :  36
+2021-02-23 17:35:51,035 INFO completion of GetAdvisoryByStateId36_37FromIMD  Crop advisory for station id : 36
+2021-02-23 17:35:51,035 INFO ended of GetAdvisoryByStateId36_37FromIMD  Crop advisory 
+2021-02-23 17:35:51,036 INFO ending GetAdvisoryByStateId36_37FromIMD controller service
+2021-02-23 17:36:48,013 INFO starting SaveDistrictWiseNowcastNowFromFTP in notification controller service
+2021-02-23 17:36:56,172 INFO starting SaveDistrictWiseNowcastNowFromFTP in notification service
+2021-02-23 17:36:59,915 INFO connecting IMD Service in SaveDistrictWiseNowcastNowFromFTP in notification service
+2021-02-23 17:37:33,224 ERROR exception in SaveDistrictWiseNowcastNowFromFTP in notification service
+2021-02-23 17:37:36,743 INFO ending SaveDistrictWiseNowcastNowFromFTP in notification controller service
+2021-02-23 17:39:28,129 INFO starting SaveDistrictWiseNowcastNowFromFTP in notification controller service
+2021-02-23 17:39:30,235 INFO starting SaveDistrictWiseNowcastNowFromFTP in notification service
+2021-02-23 17:39:33,067 INFO connecting IMD Service in SaveDistrictWiseNowcastNowFromFTP in notification service

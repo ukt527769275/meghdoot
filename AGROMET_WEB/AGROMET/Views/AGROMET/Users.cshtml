@@ -1,0 +1,626 @@
+﻿@model AGROMET.Models.UsersModel
+@using Resources
+@{
+    ViewBag.Title = Resource.Users;
+    var StateID = "";
+    var DistrictID = "";
+    var BlockID = "";
+    var TypeOfRole = "";
+    var LanguageName = "";
+    if (Request.Cookies["StateID"] != null)
+    {
+        StateID = Request.Cookies["StateID"].Value;
+    }
+    if (Request.Cookies["DistrictID"] != null)
+    {
+        DistrictID = Request.Cookies["DistrictID"].Value;
+    }
+    if (Request.Cookies["BlockID"] != null)
+    {
+        BlockID = Request.Cookies["BlockID"].Value;
+    }
+    if (Request.Cookies["TypeOfRole"] != null)
+    {
+        TypeOfRole = Request.Cookies["TypeOfRole"].Value.ToString();
+    }
+    if (Request.Cookies["LanguageName"] != null)
+    {
+        LanguageName = Request.Cookies["LanguageName"].Value.ToString();
+    }
+}
+<style>
+    #users a {
+        color: black;
+        background-color: #a4d89a;
+    }
+</style>
+<style>
+
+    input[type=number]::-webkit-inner-spin-button,
+    input[type=number]::-webkit-outer-spin-button {
+        -webkit-appearance: none;
+        -moz-appearance: none;
+        appearance: none;
+        margin: 0;
+    }
+</style>
+@Scripts.Render("~/bundles/jqueryval")
+@using (Html.BeginForm("Users", "AGROMET", FormMethod.Post, new { enctype = "multipart/form-data", id = "usersform" }))
+{
+    <div ng-app="usersApp">
+        <div ng-controller="UsersController">
+            <div class="ng-cloak">
+                @Html.HiddenFor(model => model.DistrictList, new { id = "DistrictList" })
+                @Html.HiddenFor(model => model.BlockList, new { id = "BlockList" })
+                @Html.HiddenFor(model => model.CropList, new { id = "CropList" })
+                @Html.HiddenFor(model => model.StateId, new { id = "stateidss" })
+                @Html.HiddenFor(model => model.DistrictID, new { id = "districtidss" })
+                @Html.HiddenFor(model => model.ScientistId, new { id = "ScientistIdss", Value = @TypeOfRole })
+                <input type="hidden" id="stateids" ng-data="SelectedState.StateID" value="{{SelectedState.StateID}}" />
+                <input type="hidden" id="districtids" ng-data="SelectedDistrict.DistrictID" value="{{SelectedDistrict.DistrictID}}" />
+                <div class="row">
+                    <div class="col-xs-push-0 col-sm-4 col-md-3 brdrrite">
+                        <div>
+                            <input type="text" placeholder="@Resource.EnterPhoneNumber" ng-model="PhoneNumber" class="searchbox" />
+                        </div>
+                        <br />
+                        <div class="col-xs-8 col-sm-8 col-md-8 paddingleftfix">
+                            <select id="ddlStates" class="ddlstate" ng-init="GetUserBlocks()" ng-model="SelectedBlock" ng-options="y.BlockName for (x,y) in DDLBlocks"></select>
+                        </div>
+                        <div class="col-xs-4 col-sm-4 col-md-4 paddingfix">
+                            <input type="button" value="@Resource.Search" ng-click="SearchUsers(SelectedBlock.BlockId,PhoneNumber)" class="btn btn-default widthfit colorbrdrscheme colorscheme" />
+                        </div>
+                        <br />
+                        <br />
+                        <div ng-init="GetUsers()">
+                            <div ng-repeat="item in Users">
+                                <div class="colorscheme"><label>{{item.FirstName}} {{item.LastName}}</label></div>
+                                <div class="row">
+                                    <div class="col-xs-4 col-sm-4 col-md-4 paddingrightfix brdrriteusers">
+                                        {{item.LogInId}}
+                                    </div>
+                                    <div class="col-xs-4 col-sm-4 col-md-4 paddingrightfix brdrriteusers">
+                                        {{item.DistrictName}}
+                                    </div>
+                                    <div class="col-xs-4 col-sm-4 col-md-4 paddingrightfix">
+                                        {{item.DepartmentName}}
+                                    </div>
+                                </div>
+                                <div class="brdruserbtm mrgbtm"></div>
+                            </div>
+                        </div>
+                        <br />
+                        <br />
+                    </div>
+                    <div class="col-xs-pull-0 col-sm-6 col-md-7 paddinguserspace">
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <table class="fillavailable">
+                                    <tr>
+                                        <td><label for="titleid" class="colorscheme">@Resource.Title</label>
+                                            <span class="str"> *</span>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                @if (ViewBag.TitleList != null)
+                                                {
+                                                    @Html.DropDownListFor(m => m.TitleId, (SelectList)ViewBag.TitleList, Resource.Select, new { id = "titleid", @class = "ddlTitle fillavailable boxht" })
+                                                    @Html.HiddenFor(m => m.TitleId)
+                                                    <br />
+                                                    @Html.ValidationMessageFor(m => m.TitleId, "", new { @class = "str fillavailable" })
+                                                }
+                                                else
+                                                {
+                                                    @Html.DropDownListFor(m => m.TitleId, new SelectList(Enumerable.Empty<SelectListItem>()), Resource.Select, new { id = "titleid", @class = "ddltitle fillavailable boxht", data_val = "false" })
+                                                }
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <br />
+                                            <label for="firstname" class="colorscheme">@Resource.FirstName</label>
+                                            <span class="str"> *</span>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <br />
+                                                @Html.TextBoxFor(m => m.FirstName, new { id = "firstname", @class = "fillavailable boxht" })
+                                                <br />
+                                                @Html.ValidationMessageFor(m => m.FirstName, "", new { @class = "str fillavailable" })
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <br /><label for="mobilenumber" class="colorscheme">@Resource.Mobile</label>
+                                            <span class="str"> *</span>
+                                        </td>
+                                        <td>
+                                            <br />
+                                            <div>
+                                                @Html.TextBoxFor(m => m.MobileNumber, new { id = "mobilenumbers", @class = "fillavailable boxht", @type = "number" })
+                                                <br />
+                                                @Html.ValidationMessageFor(m => m.MobileNumber, "", new { @class = "str fillavailable" })
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><br /><label for="location" class="colorscheme">@Resource.Location</label></td>
+                                        <td>
+                                            <br />
+                                            <div>
+                                                @Html.TextBoxFor(m => m.Location, new { id = "location", @class = "fillavailable boxht", data_val = "false" })
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><br /><label for="designation" class="colorscheme">@Resource.Designation</label></td>
+                                        <td><br />
+                                            <div>
+                                                @Html.TextBoxFor(m => m.Designation, new { id = "designation", @class = "fillavailable boxht", data_val = "false" })
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><br />
+                                        <label for="departmentid" class="colorscheme">@Resource.Department</label>
+                                        <span class="str"> *</span>
+                                        </td>
+                                        <td>
+                                            <br />
+                                            <div>
+                                                @if (ViewBag.DepartmentList != null)
+                                                {
+                                                    @Html.DropDownListFor(m => m.DepartmentId, (SelectList)ViewBag.DepartmentList, Resource.Select, new { id = "departmentid", @class = "fillavailable boxht" })
+                                                    @Html.HiddenFor(m => m.DepartmentId)
+                                                    <br />
+                                                    @Html.ValidationMessageFor(m => m.DepartmentId, "", new { @class = "str fillavailable" })
+                                                }
+                                                else
+                                                {
+                                                    @Html.DropDownListFor(m => m.DepartmentId, new SelectList(Enumerable.Empty<SelectListItem>()), Resource.Select, new { id = "departmentid", @class = "fillavailable boxht", data_val = "false" })
+                                                }
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <table class="fillavailable">
+                                    <tr>
+                                        <td><label for="email" class="colorscheme">@Resource.Gender</label>
+                                            <span class="str"> *</span></td>
+                                        <td>
+                                            <div>
+                                                @if (ViewBag.GenderList != null)
+                                                {
+                                                    @Html.DropDownListFor(m => m.GenderId, (SelectList)ViewBag.GenderList, Resource.Select, new { id = "genderid", @class = "ddlgender fillavailable boxht" })
+                                                    @Html.HiddenFor(m => m.GenderId)
+                                                    <br />
+                                                    @Html.ValidationMessageFor(m => m.GenderId, "", new { @class = "str fillavailable" })
+                                                }
+                                                else
+                                                {
+                                                    @Html.DropDownListFor(m => m.GenderId, new SelectList(Enumerable.Empty<SelectListItem>()), Resource.Select, new { id = "genderid", @class = "ddlgender fillavailable boxht", data_val = "false" })
+                                                }
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <br /><label for="lastname" class="colorscheme">@Resource.LastName</label>
+                                        </td>
+                                        <td>
+                                            <div>
+                                                <br />
+                                                @Html.TextBoxFor(m => m.LastName, new { id = "lastname", @class = "fillavailable boxht" })
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><br /><label for="email" class="colorscheme">@Resource.Email</label></td>
+                                        <td>
+                                            <br />
+                                            <div>
+                                                @Html.TextBoxFor(m => m.Email, new { id = "email", @class = "fillavailable boxht", data_val = "false" })
+                                                <br />
+                                                @Html.ValidationMessageFor(m => m.Email, "", new { @class = "str fillavailable" })
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><br /><label for="pinCode" class="colorscheme">@Resource.PinCode</label></td>
+                                        <td>
+                                            <br />
+                                            <div>
+                                                @Html.TextBoxFor(m => m.PinCode, new { id = "pinCode", @class = "fillavailable boxht", data_val = "false" })
+
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><br /><label for="institution" class="colorscheme">@Resource.Institution</label></td>
+                                        <td>
+                                            <br />
+                                            <div>
+                                                @Html.TextBoxFor(m => m.Institution, new { id = "institution", @class = "fillavailable boxht", data_val = "false" })
+                                            </div>
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td><br /><label for="languageid" class="colorscheme">@Resource.Language</label>
+                                                  <span class="str"> *</span>
+                                        </td>
+                                        <td>
+                                            <br />
+                                            <div>
+                                                @if (ViewBag.LanguageList != null)
+                                                {
+                                                    @Html.DropDownListFor(m => m.LanguageId, (SelectList)ViewBag.LanguageList, Resource.Select, new { id = "languageid", @class = "fillavailable boxht" })
+                                                    @Html.HiddenFor(m => m.LanguageId)
+                                                    @Html.ValidationMessageFor(m => m.LanguageId, "", new { @class = "str fillavailable" })
+                                                }
+                                                else
+                                                {
+                                                    @Html.DropDownListFor(m => m.LanguageId, new SelectList(Enumerable.Empty<SelectListItem>()), Resource.Select, new { id = "languageid", @class = "fillavailable boxht", data_val = "false" })
+                                                }
+                                            </div>
+                                        </td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+
+                        <br />
+                        <div class="brdrbtm h4 colorscheme">@Resource.ServiceArea</div>
+                        <br />
+                        <div class="row">
+                            <div class="col-xs-2 col-sm-2 col-md-2">
+                                <label for="ddlStates" class="colorscheme">@Resource.State &nbsp; </label>
+                            </div>
+                            <div class="col-xs-4 col-sm-4 col-md-4">
+                                <select id="ddlStates" ng-model="SelectedState" ng-init="GetState(@TypeOfRole,@StateID)" ng-options="y.StateName for (x,y) in State" ng-change="GetDistrict(SelectedState.StateID);" class="fillavailable boxht"></select>
+                                <br /><div id="stt"></div>
+                            </div>
+                            <div class="col-xs-2 col-sm-2 col-md-2">
+                                <label for="ddlDistricts" class="colorscheme"><b>@Resource.Districts</b></label>
+                            </div>
+                            <div class="col-xs-4 col-sm-4 col-md-4">
+                                <div ng-show="districttag">
+                                    <select id="ddlDistricts" ng-model="SelectedDistrict" ng-init="GetDistrict(@StateID)" ng-options="y.DistrictName for (x,y) in District" ng-change="GetBlockById(SelectedDistrict.DistrictID)" class="fillavailable boxht"></select>
+                                    <br /><div id="dst"></div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6 paddingtxtleftright">
+                                <div class="colorscheme brdrbtm mrgbtm"><b>@Resource.Blocks</b></div>
+                                <div ng-init="GetBlock(@DistrictID)" class="scrollstyle">
+                                    <div ng-show="blocktag">
+                                        <div ng-repeat="Blockitem in Block" id="blockid">
+                                            <label class="lblside">
+                                                <input type="checkbox" id="{{Blockitem.BlockID}}" ng-checked="selectAllBlocks" />
+                                                {{Blockitem.BlockName}}
+                                            </label><br />
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6 paddingtxtleftright">
+                                <div class="colorscheme brdrbtm mrgbtm"><b>@Resource.Crops</b></div>
+                                <div ng-init="GetCrop(@TypeOfRole)" class="scrollstyle" ng-show="croptag">
+                                    <div ng-repeat="Cropitem in Crop" id="cropid">
+                                        <label class="lblside">
+                                            <input type="checkbox" id="{{Cropitem.CropID}}" ng-checked="selectAllCrops">
+                                            {{Cropitem.CropName}}
+                                        </label><br />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                               
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <br />
+                                <input type="button" value="@Resource.Add" onclick="Publish()" class="btn btn-default btn-sm pull-right colorbackscheme center-block btnhover" />
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-pull-0 col-sm-2 col-md-2">
+                        <div class="userimgtag center-block">
+                            <output id="imglist"></output>
+                        </div>
+                        <div>
+                            @Html.TextBoxFor(m => m.File, "", new { name = "cafile", id = "cafile", accept = "image/*", @type = "file",@class= "fillavailable" })
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section scripts {
+    <script>
+    var app = angular.module("usersApp", []);
+    app.controller("UsersController", function ($scope, $http) {
+        $scope.State = [];
+        $scope.District = [];
+        $scope.Block = [];
+        $scope.Crop = [];
+        $scope.Langauge = [];
+        $scope.DDLBlocks = [];
+        $scope.Users = [];
+        $scope.GetState = function (TypeOfRole,StateID) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetStateList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { TypeOfRole: TypeOfRole, LanguageName: "@LanguageName", StateID: StateID }
+                }).then(function (response) {
+                    $scope.State = response.data;
+                    var item = { StateID: 0, StateName: "--Select--", LanguageType: null, RefreshDateTime: "" }
+                    $scope.State.splice(0, 0, item);
+                    $scope.SelectedState = $scope.State[0];
+                },
+                function (response) {
+                    alert("No result found");
+                });
+        }
+        $scope.GetDistrict = function (StateID) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetDistrictList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { TypeOfRole: @TypeOfRole, LanguageName: "@LanguageName", StateID: StateID }
+                }).then(function (response) {
+                    $scope.District = response.data;
+                    var item = { DistrictID: 0, DistrictName: "--Select--", LanguageType: null, RefreshDateTime: "" }
+                    $scope.District.splice(0, 0, item);
+                    $scope.SelectedDistrict = $scope.District[0];
+                    if ($scope.District.length > 0) {
+                    $scope.districttag = true;
+                }
+                },
+                function (response) {
+                    alert("No result found");
+                });
+        }
+        $scope.GetBlock = function (DistrictID) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetBlockList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { TypeOfRole: @TypeOfRole, LanguageName: "@LanguageName", DistrictID: DistrictID }
+                }).then(function (response) {
+                    $scope.Block = response.data;
+                    
+                    if ($scope.Block.length > 0) {
+                        $scope.blocktag = true;
+                    }
+                },
+                function (response) {
+                    alert("No result found");
+             });
+        }
+        $scope.GetBlockById = function (DistrictID) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetBlockList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { TypeOfRole: @TypeOfRole, LanguageName: "@LanguageName", DistrictID: DistrictID }
+                }).then(function (response) {
+                $scope.Block = response.data;
+                    if ($scope.Block.length > 0) {
+                        $scope.blocktag = true;
+                    }
+                },
+                function (response) {
+                    alert("No result found");
+             });
+        }
+        $scope.GetCrop = function (TypeOfRole) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetCropList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { TypeOfRole: TypeOfRole, LanguageName: "@LanguageName" }
+                }).then(function (response) {
+                    $scope.Crop = response.data;
+                    if ($scope.Crop.length > 0) {
+                        $scope.croptag = true;
+                    }
+                },
+                function (response) {
+                    alert("No result found");
+                });
+        }
+        $scope.GetLangauge = function () {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetLangaugeList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { LanguageTypeId: 0, LanguageTypeName: "@LanguageName" }
+                }).then(function (response) {
+                    $scope.Langauge = response.data;
+                    if ($scope.Langauge.length > 0) {
+                        $scope.langaugetag = true;
+                    }
+                },
+                function (response) {
+                    alert("No result found");
+                });
+        }
+        $scope.GetUsers = function () {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetUsers", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { UsersID: @TypeOfRole}
+                }).then(function (response) {
+                    $scope.Users = response.data;
+                    if ($scope.Users.length > 0) {
+                        $scope.userstag = true;
+                    }
+                },
+                function (response) {
+                    alert("No result found");
+                });
+        }
+        $scope.SearchUsers = function (BlockID, LogInId) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("SearchUsers", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { UsersID: @TypeOfRole, BlockID: BlockID, LogInId: LogInId}
+                }).then(function (response) {
+                    $scope.Users = response.data;
+                    if ($scope.Users.length > 0) {
+                        $scope.userstag = true;
+                    }
+                },
+                function (response) {
+                    alert("No result found");
+                });
+        }
+        $scope.GetUserBlocks = function () {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetUserBlocks", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { UserID: @TypeOfRole}
+                }).then(function (response) {
+                    $scope.DDLBlocks = response.data;
+                    var item = { BlockID: 0, BlockName: "--Select--", RefreshDateTime: "" }
+                    $scope.DDLBlocks.splice(0, 0, item);
+                    $scope.SelectedBlock = $scope.DDLBlocks[0];
+                },
+                function (response) {
+                    alert("No result found");
+                });
+        }
+    });
+    </script>
+    <script>
+        var $fileUpload = $("#cafile"),
+            $list = $('#imglist'),
+            thumbsArray = [],
+            maxUpload = 10;
+
+        // READ FILE + CREATE IMAGE
+        function read(f) {
+            return function (e) {
+                var base64 = e.target.result;
+                var $img = $('<img/>', {
+                    src: base64,
+                    title: encodeURIComponent(f.name), //( escape() is deprecated! )
+                    "class": "imguser img-circle"
+                });
+                var $thumbParent = $("<span/>", { html: $img, "class": "thumbParent" }).append('<span>&emsp;<span/>');
+                thumbsArray.push(base64); // Push base64 image into array or whatever.
+                $list.append($thumbParent);
+            };
+        }
+
+        // HANDLE FILE/S UPLOAD
+        function handleFileSelect(e) {
+            e.preventDefault(); // Needed?
+            var files = e.target.files;
+            var len = files.length;
+            //if (len > maxUpload || thumbsArray.length >= maxUpload) {
+            //    return alert("Sorry you can upload only 5 images");
+            //}
+            for (var i = 0; i < len; i++) {
+                var f = files[i];
+                var ftype = files[i].type;
+                if (!ftype.match('image.*')) {
+                    $list.empty();
+                    $fileUpload.val("");
+                    thumbsArray = [];
+                    alert("Please select Image file.")
+                    return false;
+                }// Only images allowed
+                var reader = new FileReader();
+                reader.onload = read(f); // Call read() function
+                reader.readAsDataURL(f);
+            }
+        }
+        $fileUpload.click(function () {
+            $list.empty();
+            $fileUpload.val("");
+            thumbsArray = [];
+        })
+        $fileUpload.change(function (e) {
+            handleFileSelect(e);
+        });
+
+        $list.on('click', '.remove_thumb', function () {
+            var $removeBtns = $('.remove_thumb'); // Get all of them in collection
+            var idx = $removeBtns.index(this);   // Exact Index-from-collection
+            var files = jQuery("#sodfile")[0].files;
+            jQuery("#sodfile")[0].files[idx].remove;
+            $(this).closest('span.thumbParent').remove(); // Remove tumbnail parent
+            thumbsArray.splice(idx, 1); // Remove from array
+        });
+
+
+    </script>
+    <script>
+        function Publish() {
+            $("#DistrictList").val("");
+            $('#districtid label').find('input[type="checkbox"]').each(function () {
+                if (this.checked == true) {
+                    $("#DistrictList").val($("#DistrictList").val() + "," + $(this).attr('id'));
+                }
+            });
+            $("#BlockList").val("");
+            $('#blockid label').find('input[type="checkbox"]').each(function () {
+                if (this.checked == true) {
+                    $("#BlockList").val($("#BlockList").val() + "," + $(this).attr('id'));
+                }
+            });
+            $("#CropList").val("");
+            $('#cropid label').find('input[type="checkbox"]').each(function () {
+                if (this.checked == true) {
+                    $("#CropList").val($("#CropList").val() + "," + $(this).attr('id'));
+                }
+            });
+            $("#stateidss").val($('#stateids').val());
+            $("#districtidss").val($('#districtids').val());
+            $("#usersform").submit();
+        }
+        function MobileNumber(evt) {
+            evt = (evt) ? evt : window.event;
+            var charCode = (evt.which) ? evt.which : evt.keyCode;
+            if (charCode > 31 && (charCode < 48 || charCode > 57)) {
+                return false;
+            }
+            var i = document.getElementById("mobilenumbers").value;
+            if (i.length >= 10)
+                return false;
+            return true;
+        }
+    </script>
+}

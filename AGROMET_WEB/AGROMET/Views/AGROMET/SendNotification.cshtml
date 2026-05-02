@@ -1,0 +1,445 @@
+﻿@model AGROMET.Models.NotificationsModel
+@using Resources
+@{
+    ViewBag.Title = Resource.Send;
+    var rolename = "";
+    var StateID = "";
+    var DistrictID = "";
+    var BlockID = "";
+    var TypeOfRole = "";
+    var LanguageName = "";
+    if (Request.Cookies["StateID"] != null)
+    {
+        StateID = Request.Cookies["StateID"].Value;
+    }
+    if (Request.Cookies["DistrictID"] != null)
+    {
+        DistrictID = Request.Cookies["DistrictID"].Value;
+    }
+    if (Request.Cookies["BlockID"] != null)
+    {
+        BlockID = Request.Cookies["BlockID"].Value;
+    }
+    if (Request.Cookies["RoleName"] != null)
+    {
+        rolename = Request.Cookies["RoleName"].Value;
+    }
+    if (Request.Cookies["TypeOfRole"] != null)
+    {
+        TypeOfRole = Request.Cookies["TypeOfRole"].Value.ToString();
+    }
+    if (Request.Cookies["LanguageName"] != null)
+    {
+        LanguageName = Request.Cookies["LanguageName"].Value.ToString();
+    }
+}
+<style>
+    #notifications a {
+        color: black;
+        background-color: #a4d89a;
+    }
+</style>
+@using (Html.BeginForm("SendNotification", "AGROMET", FormMethod.Post, new { enctype = "multipart/form-data", id = "Notificationform" }))
+{
+    <div ng-app="CropAdvisory">
+        <div ng-controller="CropAdvisoryController">
+            <div class="ng-cloak">
+                <div class="row">
+                    <div class="col-md-2 brdrrite">
+                        <div class="mrgbtm colorscheme"><b>@Resource.State</b></div>
+                        @Html.HiddenFor(model => model.DistrictList, new { id = "DistrictList" })
+                        @Html.HiddenFor(model => model.BlockList, new { id = "BlockList" })
+                        @Html.HiddenFor(model => model.CropList, new { id = "CropList" })
+                        @Html.HiddenFor(model => model.LanguageList, new { id = "LanguageList" })
+                        @Html.HiddenFor(model => model.StateId, new { id = "stateidss" })
+                        @Html.HiddenFor(model => model.ScientistId, new { id = "ScientistIdss", Value = @TypeOfRole })
+                        @Html.HiddenFor(model => model.LanguageType, new { id = "LanguageName", Value = @LanguageName })
+                        @Html.HiddenFor(model => model.SMSLanguage, new { id = "smslang" })
+
+                        <input type="hidden" id="stateids" ng-data="SelectedState.StateID" value="{{SelectedState.StateID}}" />
+                        <input type="hidden" id="lids" ng-data="Selectedlanguage.LanguageTypeName" value="{{Selectedlanguage.LanguageTypeName}}" />
+                        <div>
+                            <select id="ddlState" class="ddlstate" ng-model="SelectedState" ng-init="GetState(@TypeOfRole,@StateID)" ng-options="y.StateName for (x,y) in State" ng-change="GetDistrict(@TypeOfRole,SelectedState.StateID);GetBlock(@TypeOfRole,SelectedState.StateID);"></select>
+                        </div>
+                        <br />
+                        <div class="brdrbtm mrgbtm colorscheme">
+                            <b>@Resource.Districts</b><span class="str"> *</span>
+                        </div>
+                        <div ng-init="GetDistrict(@TypeOfRole,@StateID)" class="scrollstyle">
+                            <div ng-show="districttag">
+                                <label class="lblside">
+                                    <input type="checkbox" ng-model="selectAllDistricts" onclick="dstchk();" />
+                                    @Resource.Selectall
+                                </label>
+                                <br />
+                                <div ng-repeat="Districtitem in District" id="districtid">
+                                    <label class="lblside">
+                                        <input type="checkbox" id="{{Districtitem.DistrictID}}" onclick="dstchk();" ng-checked="selectAllDistricts"> {{Districtitem.DistrictName}}
+                                    </label>
+                                    <br />
+                                </div>
+
+                            </div>
+                        </div>
+                        <div id="errmsgdst"></div>
+                        <br />
+                        <div class="brdrbtm mrgbtm colorscheme"><b>@Resource.Blocks</b></div>
+                        <div ng-init="GetBlock(@TypeOfRole, @StateID)" class="scrollstyle">
+                            <div ng-show="blocktag">
+                                <label class="lblside">
+                                    <input type="checkbox" ng-model="selectAllBlocks" />
+                                    @Resource.Selectall
+                                </label>
+                                <br />
+                                <div ng-repeat="Blockitem in Block" id="blockid">
+                                    <label class="lblside">
+                                        <input type="checkbox" id="{{Blockitem.BlockID}}" ng-checked="selectAllBlocks">
+                                        {{Blockitem.BlockName}}
+                                    </label><br />
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class=" mrgbtm colorscheme brdrbtm"><b>@Resource.Crops</b></div>
+                        <div ng-init="GetCrop(@TypeOfRole)" class="scrollstyle">
+                            <div ng-show="croptag">
+                                <label class="lblside">
+                                    <input type="checkbox" ng-model="selectAllCrops" />
+                                    @Resource.Selectall
+                                </label>
+                                <br />
+                                <div ng-repeat="Cropitem in Crop" id="cropid">
+                                    <label class="lblside">
+                                        <input type="checkbox" id="{{Cropitem.CropID}}" ng-checked="selectAllCrops">
+                                        {{Cropitem.CropName}}
+                                    </label><br />
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div>
+                            <div class="mrgbtm brdrbtm colorscheme">
+                                <b>@Resource.Transalationrequired</b><span class="str"> *</span>
+                            </div>
+                            <div ng-show="languagetag" class="scrollstyleright">
+                                <select id="ddllanguage" class="ddlstate" ng-model="Selectedlanguage" ng-init="GetLanguage()" ng-options="y.LanguageTypeName for (x,y) in Language" onchange="lngradio()"></select>
+                            </div>
+                            <div id="errmsglng"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-8 paddingtitlespace">
+                        <div class="row">
+                            <div class="col-xs-4 col-sm-4 col-md-4">
+                                <label class="mrgbtm colorscheme">@Resource.SelectCategory</label>
+                                <br />
+                                <div class="mrgbtm">
+                                    @if (ViewBag.CropAdvisoryCategoryList != null)
+                                    {
+                                        @Html.DropDownListFor(m => m.CACID, (SelectList)ViewBag.CropAdvisoryCategoryList, new { id = "categoryid", @class = "ddlcategory" })
+                                        @Html.HiddenFor(m => m.CACID)
+                                    }
+                                    else
+                                    {
+                                        @Html.DropDownListFor(m => m.CACID, new SelectList(Enumerable.Empty<SelectListItem>()), "--Select--", new { id = "categoryid", @class = "ddlcategory" })
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-xs-4 col-sm-4 col-md-4">
+
+                            </div>
+                            <div class="col-xs-4 col-sm-4 col-md-4">
+                                <div class="mrgbtm brdrbtm colorscheme">
+                                    <b>@Resource.AlertsType</b><span class="str"> *</span>
+                                </div>
+                                <label class="lblside" id="mbl">
+                                    @Html.CheckBoxFor(m => m.MobileApplication, new { id = "mobileapplication", onclick = "clearchk();" })
+                                    @Resource.MobileApplication
+                                </label>
+                                <br />
+                                <label class="lblside" id="sms">
+                                    @Html.CheckBoxFor(m => m.SMSAlert, new { id = "smsalert", onclick = "clearchk();" })
+                                    @Resource.SmsAlert
+                                </label>
+                                <br />
+                                <div id="errmsg"></div>
+                            </div>
+                        </div>
+                      
+                        <div class="pull-right">
+                            <span id="text-title">0/255</span>
+                        </div>
+                        <div class="mrgbtm colorscheme"><b>@Resource.Title</b></div>
+                        <div class="mrgbtm">@Html.TextAreaFor(m => m.Title, new { id = "titles", @class = "title", @placeholder = @Html.DisplayName(@Resource.EnterTitle), aria_describedby = "text-counter-parent", onkeydown = "count(this)",  maxlength = "255" })</div>
+                        <div class="pull-right">
+                            <span id="text-brief">0/255</span>
+                        </div>
+                        <div class="mrgbtm colorscheme"><b>@Resource.BriefText</b></div>
+                        <div class="mrgbtm">@Html.TextAreaFor(m => m.BriefText, new { id = "brieftext", @class = "title", @placeholder = @Html.DisplayName(@Resource.EnterBriefText), aria_describedby = "text-counter-parent", onkeydown = "countbrief(this)", maxlength = "255" })</div>
+                        <div class="mrgbtm colorscheme"><b>@Resource.Message</b></div>
+                        <div class="mrgbtm">@Html.TextAreaFor(m => m.CompleteMessage, new { id = "completemessage", @class = "completemsg", @placeholder = @Html.DisplayName(@Resource.EnterMessage) })</div>
+                        <br />
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+
+                            </div>
+                            <div class="col-xs-6 col-sm-6 col-md-6">
+                                <div class="row">
+                                    <div class="col-xs-6 col-sm-6 col-md-8">
+                                        <input type="submit" value="@Resource.Send" class="pull-right btn btn-md colorbackscheme btnhover" onclick="SendNotification()" />
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-4">
+                                        <a href="@Url.Action("Notifications","AGROMET")">
+                                            <input type="button" value="@Resource.Cancel" class="pull-right btn btn-default btn-md colorscheme colorbrdrscheme btnhover" />
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-2">
+                        @*<div class="rightchk">
+                            <div class="mrgbtm brdrbtm colorscheme">
+                                <b>@Resource.Transalationrequired</b>
+                                <span class="str"> *</span>
+                            </div>
+                            <div ng-init="GetLanguage()" class="scrollstyleright">
+                                <div ng-show="languagetag">
+                                    <div ng-repeat="Languageitem in Language" id="langaugeid">
+                                        <label class="lblside">
+                                            <input type="radio" value="{{Languageitem.LanguageTypeName}}" id="{{Languageitem.LanguageTypeId}}" ng-model="Languageitem.Culture" name="transalate" onclick="lngradio();">
+                                            {{Languageitem.LanguageTypeName}}
+                                        </label><br />
+                                    </div>
+                                    @*<br />
+                <input type="button" value="@Resource.Transalate" ng-click="GetContent()" class="btn btn-sm colorbackscheme" />
+
+                                </div>
+                            </div>
+                            <div id="errmsglng"></div>
+                            <br />
+                           
+                        </div>*@
+                    </div>
+                </div>
+                <div class="modal fade" id="ImageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-sm modaldialogs" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <button type="button" class="close" data-dismiss="modal">
+                                    <span class="redcolor">  @Resource.Close </span><span class="redcolor"> &times;</span>
+                                </button>
+                                <br />
+                                <br />
+                                <div class="text-center" id="errormsg"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section scripts {
+    <script>
+    var app = angular.module("CropAdvisory", []);
+    app.controller("CropAdvisoryController", function ($scope, $http) {
+        $scope.State = [];
+        $scope.District = [];
+        $scope.Block = [];
+        $scope.Crop = [];
+        $scope.Language = [];
+        $scope.GetState = function (TypeOfRole,StateID) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetStateList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { TypeOfRole: TypeOfRole, LanguageName: "@LanguageName", StateID: StateID }
+                }).then(function (response) {
+                    $scope.State = response.data;
+                    $scope.SelectedState = $scope.State[0];
+                },
+                function (response) {
+                    alert("No result found");
+                });
+        }
+        $scope.GetDistrict = function (TypeOfRole,StateID) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetDistrictList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { TypeOfRole: TypeOfRole, LanguageName: "@LanguageName", StateID: StateID }
+                }).then(function (response) {
+                    $scope.District = response.data;
+                    if ($scope.District.length > 0) {
+                    $scope.districttag = true;
+                }
+                },
+                function (response) {
+                    alert("No result found");
+                });
+        }
+        $scope.GetBlock = function (TypeOfRole, StateID) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetBlockList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { TypeOfRole: TypeOfRole, LanguageName: "@LanguageName", StateID: StateID }
+                }).then(function (response) {
+                $scope.Block = response.data;
+                    if ($scope.Block.length > 0) {
+                        $scope.blocktag = true;
+                    }
+                },
+                function (response) {
+                    alert("No result found");
+             });
+        }
+        $scope.GetCrop = function (TypeOfRole) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetCropList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { TypeOfRole: TypeOfRole, LanguageName: "@LanguageName" }
+                }).then(function (response) {
+                    $scope.Crop = response.data;
+                    if ($scope.Crop.length > 0) {
+                        $scope.croptag = true;
+                    }
+                },
+                function (response) {
+                    alert("No result found");
+                });
+        }
+        $scope.GetLanguage = function () {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetLanguageList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { LanguageTypeId: 0, LanguageTypeName: "@LanguageName" }
+                }).then(function (response) {
+                    $scope.Language = response.data;
+                    if ($scope.Language.length > 0) {
+                        $scope.languagetag = true;
+                        $scope.Selectedlanguage = $scope.Language[0];
+                    }
+                },
+                function (response) {
+                    alert("No result found");
+                });
+        }
+    });
+    </script>
+    <script>
+        function SendNotification() {
+            $("#DistrictList").val("");
+            $('#districtid label').find('input[type="checkbox"]').each(function () {
+                if (this.checked == true) {
+                    $("#DistrictList").val($("#DistrictList").val() + "," + $(this).attr('id'));
+                }
+            });
+            $("#BlockList").val("");
+            $('#blockid label').find('input[type="checkbox"]').each(function () {
+                if (this.checked == true) {
+                    $("#BlockList").val($("#BlockList").val() + "," + $(this).attr('id'));
+                }
+            });
+            $("#CropList").val("");
+            $('#cropid label').find('input[type="checkbox"]').each(function () {
+                if (this.checked == true) {
+                    $("#CropList").val($("#CropList").val() + "," + $(this).attr('id'));
+                }
+            });
+            //$("#LanguageList").val("");
+            //$('#langaugeid label').find('input[type="checkbox"]').each(function () {
+            //    if (this.checked == true) {
+            //        $("#LanguageList").val($("#LanguageList").val() + "," + $(this).attr('id'));
+            //    }
+            //});
+            $("#smslang").val("");
+
+            //var oRadio = document.getElementsByName("transalate");
+
+            //for (var i = 0; i < oRadio.length; i++) {
+            //    if (oRadio[i].checked) {
+            //        $("#smslang").val(oRadio[i].value);
+            //        //alert($("#smslang").val());
+            //    }
+            //}
+            
+            $("#stateidss").val($('#stateids').val());
+            $("#smslang").val($("#lids").val());
+             if ($("#DistrictList").val() == null || $("#DistrictList").val() == "") {
+                event.preventDefault();
+                $("#errmsgdst").css({ "display": "block","color":"red" })
+                $("#errmsgdst").html("@Resource.Pleaseselect @Resource.Districts")
+                $("#errormsg").html("@Resource.Pleaseselect @Resource.Districts!");
+                $('#ImageModal').modal();
+                $('#Notificationform').attr('onsubmit', 'return false;');
+            
+             }
+             else if ($("#smslang").val() == null || $("#smslang").val() == "")
+            {
+                event.preventDefault();
+                 $("#errmsglng").css({ "display": "block","color":"red" })
+                $("#errmsglng").html("@Resource.Pleaseselect @Resource.Language")
+                 $("#errormsg").html("@Resource.Pleaseselect @Resource.Language!");
+                $('#ImageModal').modal();
+                $('#Notificationform').attr('onsubmit', 'return false;');
+             
+            }
+            else if ($("#mobileapplication").prop("checked") != true && $("#smsalert").prop("checked") != true) {
+                event.preventDefault();
+                $("#errmsg").css({ "display": "block","color":"red" })
+                $("#errmsg").html("@Resource.Pleaseselect @Resource.NotificationMethod")
+                //$("#mbl").css({ "color": "red" });
+                //$("#sms").css({ "color": "red" });
+                $("#errormsg").html("@Resource.Notificationerr");
+                $('#ImageModal').modal();
+                $('#Notificationform').attr('onsubmit', 'return false;');
+               
+            }
+            else {
+                $("#Notificationform").submit();
+                $('#Notificationform').attr('onsubmit', 'return true;');
+            }
+           
+        }
+        function clearchk() {
+            $("#errmsg").css({ "display": "none" })
+            //$("#mbl").css({ "color": "black" });
+            //$("#sms").css({ "color": "black" });
+        }
+        function lngradio() {
+            $("#errmsglng").css({ "display": "none" })
+        }
+        function dstchk() {
+            $("#errmsgdst").css({ "display": "none" })
+        }
+    </script>
+    <script>
+        function count(e) {
+            var max = 255;
+            var len = $("#titles").val().length;
+            var cha = len + "/" + max;
+            $('#text-title').html(cha);
+        }
+    </script>
+    <script>
+        function countbrief(e) {
+            var max = 255;
+            var len = $("#brieftext").val().length;
+            var cha = len + "/" + max;
+            $('#text-brief').html(cha);
+        }
+    </script>
+}

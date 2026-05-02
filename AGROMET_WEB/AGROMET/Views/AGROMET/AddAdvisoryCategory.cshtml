@@ -1,0 +1,859 @@
+﻿@model AGROMET.Models.CropAdvisoryModel
+@using Resources
+@{
+    ViewBag.Title = Resource.AddAdvisory;
+    var StateID = "";
+    var DistrictID = "";
+    var BlockID = "";
+    var TypeOfRole = "";
+    var LanguageName = "";
+    var Select = Resource.Select;
+    if (Request.Cookies["StateID"] != null)
+    {
+        StateID = Request.Cookies["StateID"].Value;
+    }
+    if (Request.Cookies["DistrictID"] != null)
+    {
+        DistrictID = Request.Cookies["DistrictID"].Value;
+    }
+    if (Request.Cookies["BlockID"] != null)
+    {
+        BlockID = Request.Cookies["BlockID"].Value;
+    }
+    if (Request.Cookies["TypeOfRole"] != null)
+    {
+        TypeOfRole = Request.Cookies["TypeOfRole"].Value.ToString();
+    }
+    if (Request.Cookies["LanguageName"] != null)
+    {
+        LanguageName = Request.Cookies["LanguageName"].Value.ToString();
+    }
+}
+<style>
+    #cropadvisory a {
+        color: black;
+        background-color: #a4d89a;
+    }
+</style>
+@using (Html.BeginForm("AddAdvisoryCategory", "AGROMET", FormMethod.Post, new { enctype = "multipart/form-data", id = "cropadvisorycategory" }))
+{
+    @Html.AntiForgeryToken();
+    <div ng-app="addCropAdvisorycategory">
+        <div ng-controller="AddCropAdvisorycategoryController">
+            <div class="ng-cloak">
+                <div class="row">
+                    <div class="col-md-2 brdrrite">
+                        <div class="mrgbtm colorscheme"><b>@Resource.State</b></div>
+                        @Html.HiddenFor(model => model.DistrictList, new { id = "DistrictList" })
+                        @Html.HiddenFor(model => model.BlockList, new { id = "BlockList" })
+                        @Html.HiddenFor(model => model.CropList, new { id = "CropList" })
+                        @Html.HiddenFor(model => model.LanguageList, new { id = "LanguageList" })
+                        @Html.HiddenFor(model => model.StateId, new { id = "stateidss" })
+                        @Html.HiddenFor(model => model.ScientistId, new { id = "ScientistIdss", Value = @TypeOfRole })
+                        @Html.HiddenFor(model => model.SMSLanguage, new { id = "smslang" })
+                        @Html.HiddenFor(model => model.LanguageType, new { id = "LanguageName", Value = @LanguageName })
+                        @Html.HiddenFor(model => model.PeriodStartDate, new { id = "startdate" })
+                        @Html.HiddenFor(model => model.PeriodEndDate, new { id = "enddate" })
+                        @Html.HiddenFor(model => model.LanguageId, new { id = "lid" })
+
+                        <input type="hidden" id="stateids" ng-data="SelectedState.StateID" value="{{SelectedState.StateID}}" />
+                        <input type="hidden" id="lids" ng-data="Selectedlanguage.LanguageTypeId" value="{{Selectedlanguage.LanguageTypeId}}" />
+                        <div>
+                            <select id="ddlStates" class="ddlstate" ng-model="SelectedState" ng-init="GetState(@TypeOfRole,@StateID)" ng-options="y.StateName for (x,y) in State" ng-change="GetDistrict(@TypeOfRole,SelectedState.StateID);"></select>
+                        </div>
+                        <br />
+                        <div class="brdrbtm mrgbtm colorscheme">
+                            <b>@Resource.Districts</b><span class="str"> *</span>
+                        </div>
+                        <div ng-init="GetDistrict(@TypeOfRole,@StateID)" class="scrollstyle">
+                            <div ng-show="districttag">
+                                <label class="lblside">
+                                    <input type="checkbox" ng-model="selectAllDistricts" onclick="dstchk();" />
+                                    @Resource.Selectall
+                                </label>
+                                <br />
+                                <div ng-repeat="Districtitem in District" id="districtid">
+                                    <label class="lblside">
+                                        <input type="checkbox" id="{{Districtitem.DistrictID}}" onclick="dstchk();" ng-checked="selectAllDistricts"> {{Districtitem.DistrictName}}
+                                    </label>
+                                    <br />
+                                </div>
+                            </div>
+                            <div id="errmsgdst"></div>
+                        </div>
+                        <br />
+                        @*<div class="brdrbtm mrgbtm colorscheme"><b>@Resource.Blocks</b></div>
+                        <div ng-init="GetBlock(@DistrictID)" class="scrollstyle">
+                            <div ng-show="blocktag">
+                                <label class="lblside">
+                                    <input type="checkbox" ng-model="selectAllBlocks" />
+                                    @Resource.Selectall
+                                </label>
+                                <br />
+                                <div ng-repeat="Blockitem in Block" id="blockid">
+                                    <label class="lblside">
+                                        <input type="checkbox" id="{{Blockitem.BlockID}}" ng-checked="selectAllBlocks" />
+                                        {{Blockitem.BlockName}}
+                                    </label><br />
+                                </div>
+                            </div>
+                        </div>
+                        <br />*@
+                        @*<div class=" mrgbtm colorscheme brdrbtm">
+                                <b>@Resource.Crops</b><span class="str"> *</span>
+                            </div>
+                            <div ng-init="GetCrop(@TypeOfRole)" class="scrollstyle">
+                                <div ng-show="croptag">
+                                    <label class="lblside">
+                                        <input type="checkbox" ng-model="selectAllCrops" onclick="cropchk();" />
+                                        @Resource.Selectall
+                                    </label>
+                                    <br />
+                                    <div ng-repeat="Cropitem in Crop" id="cropid">
+                                        <label class="lblside">
+                                            <input type="checkbox" id="{{Cropitem.CropID}}" onclick="cropchk();" ng-checked="selectAllCrops">
+                                            {{Cropitem.CropName}}
+                                        </label><br />
+                                    </div>
+                                </div>
+                                <div id="errmsgcrop"></div>
+                            </div>*@
+                        <div>
+                            <div class="mrgbtm brdrbtm colorscheme">
+                                <b>@Resource.Transalationrequired</b><span class="str"> *</span>
+                            </div>
+                            <div ng-show="languagetag" class="scrollstyleright">
+                                <select id="ddllanguage" class="ddlstate" ng-model="Selectedlanguage" ng-init="GetLanguage()" ng-options="y.LanguageTypeName for (x,y) in Language" onchange="lngradio()"></select>
+                            </div>
+                            <div id="errmsglng"></div>
+                        </div>
+                    </div>
+                    <div class="col-md-10 paddingtitleadvspace">
+                        <div class="row">
+                            <div class="col-xs-6 col-sm-5 col-md-8">
+                                <div class="pull-right">
+                                    <span id="text-counter">0/255</span>
+                                </div>
+                                <div class="mrgbtm colorscheme"><b>@Resource.Title</b></div>
+                                <div>@Html.TextAreaFor(m => m.Title, new { id = "titles", @class = "titleadv", placeholder = @Html.DisplayName(Resource.EnterTitle), aria_describedby = "text-counter-parent", onkeypress = "count(this)", maxlength = "255" })</div>
+
+                            </div>
+                            <div class="col-xs-6 col-sm-7 col-md-4">
+                                <label class="colorscheme text-center">@Resource.Period</label>
+                                <br />
+                                <div class="row">
+                                    <div class="col-xs-4 col-sm-4  col-md-4">
+                                        <div class="colorscheme mrgtopdt">
+                                            @Resource.StartDate<span class="str"> *</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-8 col-sm-8 col-md-8 paddingfix">
+                                        <div class="form-group wdtdt">
+                                            <div class='input-group date' id='datetimepicker1'>
+                                                <input type='text' class="form-control" ng-model="startdate" id="stdt" />
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <div class="row">
+                                    <div class="col-xs-4 col-sm-4  col-md-4">
+                                        <div class="colorscheme mrgtopdt">
+                                            @Resource.EndDate <span class="str"> *</span>
+                                        </div>
+                                    </div>
+                                    <div class="col-xs-8 col-sm-8 col-md-8 paddingfix">
+                                        <div class="form-group wdtdt">
+                                            <div class='input-group date' id='datetimepicker2'>
+                                                <input type='text' class="form-control" ng-model="enddate" id="enddt" />
+                                                <span class="input-group-addon">
+                                                    <span class="glyphicon glyphicon-calendar"></span>
+                                                </span>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="mrgbtm">
+                            <input type="checkbox" value="@Resource.Selectall" onchange="selectweather()" id="wscb" />
+                            &nbsp;@Resource.Selectall
+                        </div>
+                        <div class="row">
+                            <div class="col-xs-2 col-sm-2 col-md-2 col-half-offset paddingrightfix" ng-if="Countofw >= 1">
+                                @Html.CheckBoxFor(m => m.D1, new { id = "dt1" })
+                            </div>
+                            <div class="col-xs-2 col-sm-2 col-md-2 col-half-offset paddingrightfix" ng-if="Countofw >= 2">
+                                @Html.CheckBoxFor(m => m.D2, new { id = "dt2" })
+                            </div>
+                            <div class="col-xs-2 col-sm-2 col-md-2 col-half-offset paddingrightfix" ng-if="Countofw >= 3">
+                                @Html.CheckBoxFor(m => m.D3, new { id = "dt3" })
+                            </div>
+                            <div class="col-xs-2 col-sm-2 col-md-2 col-half-offset paddingrightfix" ng-if="Countofw >= 4">
+                                @Html.CheckBoxFor(m => m.D4, new { id = "dt4" })
+                            </div>
+                            <div class="col-xs-2 col-sm-2 col-md-2 col-half-offset paddingrightfix" ng-if="Countofw >= 5">
+                                @Html.CheckBoxFor(m => m.D5, new { id = "dt5" })
+                            </div>
+                        </div>
+                        <div class="row" ng-hide="weathertag" ng-init="GetWeather()">
+                            <div class="col-xs-6 col-sm-2 col-md-2 col-half-offset bottomboxadv paddingrightfix boxshado" ng-repeat="item in Weather">
+                                <div class="weatherdetailtxtblk mrgtopbtm">{{item.ForeCastDate_Lang}}</div>
+                                <div class="col-xs-5 col-sm-5 col-md-5 paddingrightfix paddingleftfix">
+                                    <img src="~/Content/images/few_clouds.png" alt="" class="imgweathersm mrgbtm" />
+                                    <div class="weatherdetailtxtsm mrgbtmimg">
+                                        <br />
+                                        <img src="~/Content/images/temprature.png" alt="" class="tempicon" />
+                                        {{current.TempMin}}
+                                    </div>
+                                    <div class="weatherdetailtxtsm">
+                                        <img src="~/Content/images/temprature.png" alt="" class="tempicon" />
+                                        {{current.TempMax}}
+                                    </div>
+                                </div>
+                                <div class="col-xs-7 col-sm-7 col-md-7 weatherdetailtxtsm paddingleftfix paddingrightfix">
+                                    <div class="mrgbtmimg">
+                                        <img src="~/Content/images/rain.png" alt="" class="imgweatherdetailsm" />
+                                        {{item.Rainfall}}
+                                    </div>
+                                    <div class="mrgbtmimg">
+                                        <img src="~/Content/images/humadity.png" alt="" class="imgweatherdetailsm" />
+                                        {{item.HumidityI}} / {{current.HumidityII}}
+                                    </div>
+                                    <div class="mrgbtmimg">
+                                        <img src="~/Content/images/Wind_speed.png" alt="" class="imgweatherdetailsm" />
+                                        {{item.WindSpeed}}
+                                    </div>
+                                    <div class="mrgbtmimg">
+                                        <img src="~/Content/images/{{item.ImgDirection}}" alt="" class="imgweatherdetailsm" />
+                                        {{item.WindDirection}}
+                                    </div>
+                                </div>
+                                <div class="weatherdetailtxtsm mrgbtmadvisory weatherdetailtxtblk">
+                                    &emsp;&emsp; {{item.Cloud}}
+                                </div>
+                            </div>
+                            <br class="hidden-sm hidden-md hidden-lg" />
+                        </div>
+                        <br />
+                        <div class="mrgbtm colorscheme"><b>@Resource.WeatherCondition</b></div>
+                        <div class="mrgbtm">@Html.TextAreaFor(m => m.WeatherCondition, new { id = "weathercondition", @class = "weatherbox", @placeholder = @Html.DisplayName(@Resource.EnterWeatherCondition), aria_describedby = "text-counter-parent" })</div>
+                        <div class="mrgbtm colorscheme"><b>@Resource.Agronomy</b></div>
+                        <div class="mrgbtm">@Html.TextAreaFor(m => m.AgroAdvisoryDetails, new { id = "agroadvisorydetails", @class = "weatherbox", placeholder = @Html.DisplayName(Resource.EnterAgroAdvisoryDetails) })</div>
+                        @*<div class="row">
+                                <div class="col-md-6">
+                                    <br />
+                                    <label class="colorscheme">@Resource.UploadImageFiles </label>
+                                    @Html.TextBoxFor(m => m.Files, "", new { name = "cafile", id = "cafile", accept = "image/*", @type = "file", @multiple = "multiple" })
+
+                                </div>
+                                <div class="col-md-6">
+                                    <output id="imglist"></output>
+                                </div>
+                            </div>
+                            <br />
+                            <div>
+                                <label class="colorscheme">@Resource.UploadAudioFile </label>
+                                @Html.TextBoxFor(m => m.AudioFile, "", new { name = "audiofile", id = "audiofile", accept = "audio/*", @type = "file" })
+                            </div>*@
+                        <br />
+                        @*<div class="row">
+                            <div class="col-xs-8 col-sm-8 col-md-8">
+
+                            </div>
+                            <div class="col-xs-4 col-sm-4 col-md-4">
+                                <div class="row">
+                                    <div class="col-xs-6 col-sm-6 col-md-6">
+                                        <input type="submit" value="@Resource.Next" class="pull-right btn btn-md colorbackscheme btnhover" onclick="Publish()" />
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6">
+                                        <a href="@Url.Action("CropAdvisory","AGROMET")">
+                                            <input type="button" value="@Resource.Cancel" class="center-block btn btn-default btn-md colorscheme colorbrdrscheme btnhover" />
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <br />*@
+                        <br />
+                    </div>
+                </div>
+                <div class="row">
+                    <div class="col-xs-2 col-sm-2 col-md-2"></div>
+                    <div class="col-md-8 paddingtitlespace">
+                        <div class="row">
+                            <div class="col-xs-4 col-sm-4 col-md-4">
+                                <label class="mrgbtm colorscheme">@Resource.SelectCrop</label>
+                                <br />
+                                <div class="mrgbtm fillavailable">
+                                    @if (ViewBag.CropList != null)
+                                    {
+                                        @Html.DropDownListFor(m => m.CropID, (SelectList)ViewBag.CropList, Resource.Select, new { id = "cropid_crop", @class = "ddlcategory", onchange = @"getcategory()" })
+                                        @Html.HiddenFor(m => m.CropID)
+                                    }
+                                    else
+                                    {
+                                        @Html.DropDownListFor(m => m.CropID, new SelectList(Enumerable.Empty<SelectListItem>()), Resource.Select, new { id = "cropids", @class = "ddlcategory" })
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-xs-4 col-sm-4 col-md-4">
+                                <label class="mrgbtm colorscheme">@Resource.SelectCategory</label>
+                                <br />
+                                <div class="mrgbtm fillavailable">
+                                    @if (ViewBag.CropAdvisoryCategoryList != null)
+                                    {
+                                        @Html.DropDownListFor(m => m.CACID, (SelectList)ViewBag.CropAdvisoryCategoryList, new { id = "categoryid", @class = "ddlcategory" })
+                                        @Html.HiddenFor(m => m.CACID)
+                                    }
+                                    else
+                                    {
+                                        @Html.DropDownListFor(m => m.CACID, new SelectList(Enumerable.Empty<SelectListItem>()), Resource.Select, new { id = "categoryid", @class = "ddlcategory" })
+                                    }
+                                </div>
+                            </div>
+                            <div class="col-xs-1 col-sm-1 col-md-1"></div>
+                            <div class="col-xs-3 col-sm-3 col-md-3">
+                                <div class="mrgbtm brdrbtm colorscheme">
+                                    <b>
+                                        @Resource.AdvisoryType
+                                    </b><span class="str"> *</span>
+                                </div>
+                                <label class="lblside" id="mbl">
+                                    @Html.CheckBoxFor(m => m.MobileApplication, new { id = "mobileapplication", onclick = "clearchk();" })
+                                    @Resource.MobileApplication
+                                </label>
+                                <br />
+                                <label class="lblside" id="sms">
+                                    @Html.CheckBoxFor(m => m.SMSAlert, new { id = "smsalert", onclick = "clearchk();" })
+                                    @Resource.SmsAlert
+                                </label>
+                                <br />
+                                <div id="errmsg"></div>
+                            </div>
+                        </div>
+
+                        <div class="pull-right">
+                            <span id="text-brief">0/255</span>
+                        </div>
+                        <div class="mrgbtm colorscheme"><b>@Resource.SMSText</b></div>
+                        <div class="mrgbtm">@Html.TextAreaFor(m => m.BriefText, new { id = "brieftext", @class = "title", @placeholder = @Html.DisplayName(@Resource.EnterSMSText), aria_describedby = "text-counter-parent", onkeypress = "countbrief(this)", maxlength = "255" })</div>
+                        <div class="mrgbtm colorscheme"><b>@Resource.Recommendations</b></div>
+                        <div class="mrgbtm">@Html.TextAreaFor(m => m.Recommendation, new { id = "recommendations", @class = "recommendation", placeholder = @Html.DisplayName(Resource.EnterRecommendations) })</div>
+                        <div class="row">
+                            <div class="col-md-6">
+                                <br />
+                                <label class="colorscheme">@Resource.UploadImageFiles </label>
+                                @Html.TextBoxFor(m => m.Files, "", new { name = "cafile", id = "cafile", accept = "image/*", @type = "file", @multiple = "multiple" })
+
+                            </div>
+                            <div class="col-md-6">
+                                <output id="imglist"></output>
+                            </div>
+                        </div>
+                        <br />
+                        <div>
+                            <label class="colorscheme">@Resource.UploadAudioFile </label>
+                            @Html.TextBoxFor(m => m.AudioFile, "", new { name = "audiofile", id = "audiofile", accept = "audio/*", @type = "file" })
+                        </div>
+                        <br />
+                        <div>
+                            <label class="colorscheme">@Resource.YouTubeLink</label>
+                            @Html.TextBoxFor(m => m.YouTubeLink, new { name = "link", id = "link" ,@class="linkwdt"})
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-xs-8 col-sm-8 col-md-8">
+
+                            </div>
+                            <div class="col-xs-4 col-sm-4 col-md-4">
+                                <div class="row">
+                                    <div class="col-xs-6 col-sm-6 col-md-6">
+                                        <input type="submit" value="@Resource.Publish" class="pull-right btn btn-md colorbackscheme btnhover" onclick="Publish()" />
+                                    </div>
+                                    <div class="col-xs-6 col-sm-6 col-md-6">
+                                        <a href="@Url.Action("CropAdvisory","AGROMET")">
+                                            <input type="button" value="@Resource.Cancel" class=" pull-right btn btn-default btn-md colorscheme colorbrdrscheme btnhover" />
+                                        </a>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-xs-2 col-sm-2 col-md-2"></div>
+
+                </div>
+                <div class="modal fade" id="ImageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-sm modaldialogs" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <button type="button" class="close" data-dismiss="modal">
+                                    <span class="redcolor">  @Resource.Close </span><span class="redcolor"> &times;</span>
+                                </button>
+                                <br />
+                                <br />
+                                <div class="text-center" id="errormsg">@Resource.Nodatafound</div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <br />
+                <br />
+                <br />
+            </div>
+        </div>
+    </div>
+
+}
+@section scripts {
+    <script>
+        var app = angular.module("addCropAdvisorycategory", []);
+        app.controller("AddCropAdvisorycategoryController", function ($scope, $http) {
+        $scope.State = [];
+        $scope.District = [];
+        $scope.Block = [];
+        $scope.Crop = [];
+            $scope.Language = [];
+            $scope.Weather = [];
+            $scope.current = [];
+            $scope.NextFour = [];
+            $scope.datevalue = "";
+            $scope.Countofw = 0;
+        $scope.GetState = function (TypeOfRole,StateID) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetStateList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { TypeOfRole: TypeOfRole, LanguageName: "@LanguageName", StateID: StateID }
+                }).then(function (response) {
+                    $scope.State = response.data;
+                    //var item = { StateID: 0, StateName: "--Select--", LanguageType: null, RefreshDateTime: "" }
+                    //$scope.State.splice(0, 0, item);
+                    $scope.SelectedState = $scope.State[0];
+                },
+                function (response) {
+                    alert("No result found");
+                });
+        }
+        $scope.GetDistrict = function (TypeOfRole,StateID) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetDistrictList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { TypeOfRole: @TypeOfRole, LanguageName: "@LanguageName", StateID: StateID }
+                }).then(function (response) {
+                    $scope.District = response.data;
+                    if ($scope.District.length > 0) {
+                    $scope.districttag = true;
+                }
+                },
+                function (response) {
+                    alert("No result found");
+                });
+        }
+        $scope.GetBlock = function (DistrictID) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetBlockList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { TypeOfRole: @TypeOfRole, LanguageName: "@LanguageName", DistrictID: DistrictID }
+                }).then(function (response) {
+                $scope.Block = response.data;
+                    if ($scope.Block.length > 0) {
+                        $scope.blocktag = true;
+                    }
+                },
+                function (response) {
+                    alert("No result found");
+             });
+        }
+        $scope.GetBlockById = function () {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetBlockList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { TypeOfRole: @TypeOfRole, LanguageName: "@LanguageName", DistrictID: this.DistrictID }
+                }).then(function (response) {
+                $scope.Block = response.data;
+                    if ($scope.Block.length > 0) {
+                        $scope.blocktag = true;
+                    }
+                },
+                function (response) {
+                    alert("No result found");
+             });
+        }
+        $scope.GetCrop = function (TypeOfRole) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetCropList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { TypeOfRole: TypeOfRole, LanguageName: "@LanguageName" }
+                }).then(function (response) {
+                    $scope.Crop = response.data;
+                    if ($scope.Crop.length > 0) {
+                        $scope.croptag = true;
+                    }
+                },
+                function (response) {
+                    alert("No result found");
+                });
+        }
+        $scope.GetLanguage = function () {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetLanguageList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { LanguageTypeId: 0, LanguageTypeName: "@LanguageName" }
+                }).then(function (response) {
+                    $scope.Language = response.data;
+                    if ($scope.Language.length > 0) {
+                        $scope.languagetag = true;
+                        @*var item = { LanguageTypeId: 0, LanguageTypeName: "@Select", LanguageType: null, RefreshDateTime: "" }
+                        $scope.Language.splice(0, 0, item);*@
+                        $scope.Selectedlanguage = $scope.Language[0];
+                    }
+                },
+                function (response) {
+                    alert("No result found");
+                });
+            }
+             $scope.GetWeather = function () {
+            $scope.msg = false;
+
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetWeatherList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { StateID: @StateID, DistrictID: @DistrictID, BlockID: @BlockID , LanguageType: "@LanguageName", WeatherDate: $scope.datevalue }
+            }).then(function (response) {
+                $scope.Weather = response.data;
+                $scope.Countofw = $scope.Weather.length;
+                if ($scope.Weather.length == 0) {
+                    $scope.NextFour = [];
+                    $scope.current = [];
+                    $scope.msg = true;
+                    $scope.weathertag = true;
+                    $('#ImageModal').modal();
+                }
+                else {
+                    $scope.current = $scope.Weather[0];
+                    $scope.NextFour = [];
+                    for (var i = 1; i < $scope.Weather.length; i++) {
+                        $scope.NextFour.push($scope.Weather[i]);
+                        $scope.msg = false;
+                        $scope.weathertag = false;
+                    }
+                }
+            },
+            function (response) {
+                $scope.msg = true;
+                $scope.weathertag = true;
+                $('#ImageModal').modal();
+            });
+        }
+    });
+    </script>
+    <script>
+        var $fileUpload = $("#cafile"),
+            $audiofile = $("#audiofile"),
+            $list = $('#imglist'),
+            thumbsArray = [],
+            maxUpload = 5;
+
+        // READ FILE + CREATE IMAGE
+        function read(f) {
+            return function (e) {
+                var base64 = e.target.result;
+                var $img = $('<img/>', {
+                    src: base64,
+                    title: encodeURIComponent(f.name), //( escape() is deprecated! )
+                    "class": "thumb"
+                });
+                var $thumbParent = $("<span/>", { html: $img, "class": "thumbParent" }).append('<span>&emsp;<span/>');
+                thumbsArray.push(base64); // Push base64 image into array or whatever.
+                $list.append($thumbParent);
+            };
+        }
+
+        // HANDLE FILE/S UPLOAD
+        function handleFileSelect(e) {
+            e.preventDefault(); // Needed?
+            var files = e.target.files;
+            var len = files.length;
+            if (len > maxUpload || thumbsArray.length >= maxUpload) {
+                return alert("you can upload only 5 images");
+            }
+            for (var i = 0; i < len; i++) {
+                var f = files[i];
+                var ftype = files[i].type;
+                if (!ftype.match('image.*')) {
+                    $list.empty();
+                    $fileUpload.val("");
+                    thumbsArray = [];
+                    alert("Please select Image file.")
+                    return false;
+                }// Only images allowed
+                var reader = new FileReader();
+                reader.onload = read(f); // Call read() function
+                reader.readAsDataURL(f);
+            }
+        }
+        $fileUpload.click(function () {
+            $list.empty();
+            $fileUpload.val("");
+            thumbsArray = [];
+        })
+        $fileUpload.change(function (e) {
+            handleFileSelect(e);
+        });
+
+        $list.on('click', '.remove_thumb', function () {
+            var $removeBtns = $('.remove_thumb'); // Get all of them in collection
+            var idx = $removeBtns.index(this);   // Exact Index-from-collection
+            var files = jQuery("#sodfile")[0].files;
+            jQuery("#sodfile")[0].files[idx].remove;
+            $(this).closest('span.thumbParent').remove(); // Remove tumbnail parent
+            thumbsArray.splice(idx, 1); // Remove from array
+        });
+
+        $audiofile.change(function (e) {
+            var audio = e.target.files;
+            var len = audio.length;
+            for (var i = 0; i < len; i++) {
+                var f = audio[i];
+                var ftype = audio[i].type;
+                if (!ftype.match('audio.*')) {
+                    $audiofile.val("");
+                    alert("Please select audio file.")
+                    return false;
+                }// Only audio allowed
+
+            }
+        });
+    </script>
+    <script>
+        function count(e) {
+            var max = 255;
+            var len = $("#titles").val().length;
+            var cha = len + "/" + max;
+            $('#text-counter').html(cha);
+        }
+    </script>
+    <script>
+        function countbrief(e) {
+            var max = 255;
+            var len = $("#brieftext").val().length;
+            var cha = len + "/" + max;
+            $('#text-brief').html(cha);
+        }
+        function selectweather() {
+            if ($("#wscb").prop("checked")) {
+                $("#dt1").prop('checked', true);
+                $("#dt2").prop('checked', true);
+                $("#dt3").prop('checked', true);
+                $("#dt4").prop('checked', true);
+                $("#dt5").prop('checked', true);
+            }
+            else {
+                $("#dt1").prop('checked', false);
+                $("#dt2").prop('checked', false);
+                $("#dt3").prop('checked', false);
+                $("#dt4").prop('checked', false);
+                $("#dt5").prop('checked', false);
+            }
+        }
+    </script>
+    <script>
+        function Publish() {
+            $("#DistrictList").val("");
+            $('#districtid label').find('input[type="checkbox"]').each(function () {
+                if (this.checked == true) {
+                    $("#DistrictList").val($("#DistrictList").val() + "," + $(this).attr('id'));
+                }
+            });
+            $("#BlockList").val("");
+            //$('#blockid label').find('input[type="checkbox"]').each(function () {
+            //    if (this.checked == true) {
+            //        $("#BlockList").val($("#BlockList").val() + "," + $(this).attr('id'));
+            //    }
+            //});
+            $("#startdate").val($("#stdt").val());
+            $("#enddate").val($("#enddt").val());
+            //$("#CropList").val("");
+            //$('#cropid label').find('input[type="checkbox"]').each(function () {
+            //    if (this.checked == true) {
+            //        $("#CropList").val($("#CropList").val() + "," + $(this).attr('id'));
+            //    }
+            //});
+            //$("#LanguageList").val("");
+            //$('#langaugeid label').find('input[type="checkbox"]').each(function () {
+            //    if (this.checked == true) {
+            //        $("#LanguageList").val($("#LanguageList").val() + "," + $(this).attr('id'));
+            //    }
+            //});
+            $("#stateidss").val($('#stateids').val());
+            $("#lid").val($("#lids").val());
+
+
+              if ($("#DistrictList").val() == null || $("#DistrictList").val() == "") {
+                 event.preventDefault();
+                 $("#errmsgdst").css({ "display": "block","color":"red" })
+                $("#errmsgdst").html("@Resource.Pleaseselect @Resource.Districts")
+                 $("#errormsg").html("@Resource.Pleaseselect @Resource.District");
+                $('#ImageModal').modal();
+                 $('#cropadvisorycategory').attr('onsubmit', 'return false;');
+             }
+              else if ($("#lids").val() == 0)
+            {
+                event.preventDefault();
+                $("#errmsglng").css({ "display": "block","color":"red" })
+                $("#errmsglng").html("@Resource.Pleaseselect @Resource.Language")
+                $("#errormsg").html("@Resource.Pleaseselect @Resource.Language");
+                $('#ImageModal').modal();
+                 $('#cropadvisorycategory').attr('onsubmit', 'return false;');
+              }
+              else if ($("#stdt").val() == 0)
+            {
+                event.preventDefault();
+                $("#errormsg").html("@Resource.Pleaseselect @Resource.StartDate");
+                $('#ImageModal').modal();
+                 $('#cropadvisorycategory').attr('onsubmit', 'return false;');
+              }
+              else if ($("#enddt").val() == 0)
+            {
+                event.preventDefault();
+                $("#errormsg").html("@Resource.Pleaseselect @Resource.EndDate");
+                $('#ImageModal').modal();
+                 $('#cropadvisorycategory').attr('onsubmit', 'return false;');
+            }
+             @*else if ($("#CropList").val() == null || $("#CropList").val() == "") {
+                 event.preventDefault();
+                  $("#errmsgcrop").css({ "display": "block","color":"red" })
+                $("#errmsgcrop").html("@Resource.Pleaseselect @Resource.Crop")
+                $("#errormsg").html("@Resource.Pleaseselect @Resource.Crop");
+                $('#ImageModal').modal();
+                $('#cropadvisorycategory').attr('onsubmit', 'return false;');
+             }*@
+             @*else if ($("#smslang").val() == null || $("#smslang").val() == "")
+            {
+                event.preventDefault();
+                $("#errmsglng").css({ "display": "block","color":"red" })
+                $("#errmsglng").html("@Resource.Pleaseselect @Resource.Language")
+                $("#errormsg").html("@Resource.Pleaseselect @Resource.Language!");
+                $('#ImageModal').modal();
+                 $('#cropadvisorycategory').attr('onsubmit', 'return false;');
+            }*@
+             @*else if ($("#mobileapplication").prop("checked") != true && $("#smsalert").prop("checked") != true) {
+                event.preventDefault();
+                $("#errmsg").css({ "display": "block","color":"red" })
+                $("#errmsg").html("@Resource.Pleaseselect @Resource.NotificationMethod")
+                //$("#mbl").css({ "color": "red" });
+                //$("#sms").css({ "color": "red" });
+                $("#errormsg").html("@Resource.Notificationerr");
+                $('#ImageModal').modal();
+                 $('#cropadvisorycategory').attr('onsubmit', 'return false;');
+
+            }*@
+            else {
+
+                 $("#cropadvisorycategory").submit();
+                 $('#cropadvisorycategory').attr('onsubmit', 'return true;');
+            }
+
+        }
+        function dstchk() {
+            $("#errmsgdst").css({ "display": "none" })
+        }
+        function cropchk() {
+            $("#errmsgcrop").css({ "display": "none" })
+        }
+        function lngradio() {
+            $("#errmsglng").css({ "display": "none" })
+        }
+        function clearchk() {
+            $("#errmsg").css({ "display": "none" })
+        }
+    </script>
+    <script type="text/javascript" src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/js/bootstrap-datepicker.min.js"></script>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.4.1/css/bootstrap-datepicker3.css" />
+    <script>
+        $(document).ready(function () {
+            $('#datetimepicker1').datepicker({
+                format: 'yyyy-mm-dd', todayHighlight: true,
+                autoclose: true,
+                startDate: '-0m'
+            });
+        });
+        $(document).ready(function () {
+            $('#datetimepicker2').datepicker({
+                format: 'yyyy-mm-dd', todayHighlight: true,
+                autoclose: true,
+                startDate: '-0m'
+            });
+        });
+    </script>
+    <script>
+        function getcategory(){
+        debugger;
+            var ProvinceIndex = $("#cropid_crop").prop('selectedIndex');
+            var ddlVar = $("#categoryid");
+        if (ProvinceIndex == 0) {
+            $('#categoryid').empty();
+            return false;
+        }
+        else {
+            var ProvinceValue = $("#cropid_crop").val();
+            $('#categoryid').empty();
+            var myUrl = "/AGROMET/GetCategoryByCropName";
+            var postData = {
+                CropID: ProvinceValue, LanguageName : "@LanguageName"
+            };
+            //addAntiForgeryToken(postData);
+            $.ajax({
+                cache: false,
+                type: "POST",
+                url: '@Url.Action("GetCategoryByCropName", "AGROMET")',
+
+                async: false,
+                data: postData,
+
+                success: function (response) {
+                    ddlVar.html('');
+                    $("#categoryid").append($("<option></option>").val(0).html("--Select--"));
+
+                    if (response.length > 0) {
+                        debugger;
+                        for (i = 0; i < response.length; i++) {
+                            var ID = parseInt(response[i].Value);
+                            var Title = response[i].Text;
+                            //alert(Title);
+                            $("#categoryid").append($("<option></option>").val(ID).html(Title));
+                        }
+                    }
+                },
+                error: function (result) {
+                    debugger;
+                    alert("error");
+                }
+            });
+        }
+    }
+    </script>
+}

@@ -1,0 +1,288 @@
+﻿@model AGROMET.Models.SurveysModel
+@using Resources
+@{
+    ViewBag.Title = Resource.Surveys;
+    var name = "";
+    var rolename = "";
+    var Image = "";
+    var imgdata = "data:image/jpg;base64,";
+    var StateID = "";
+    var DistrictID = "";
+    var BlockID = "";
+    var TypeOfRole = "";
+    var LanguageName = "";
+    if (Request.Cookies["StateID"] != null)
+    {
+        StateID = Request.Cookies["StateID"].Value;
+    }
+    if (Request.Cookies["DistrictID"] != null)
+    {
+        DistrictID = Request.Cookies["DistrictID"].Value;
+    }
+    if (Request.Cookies["BlockID"] != null)
+    {
+        BlockID = Request.Cookies["BlockID"].Value;
+    }
+    if (Request.Cookies["Name"] != null)
+    {
+        name = Request.Cookies["Name"].Value;
+    }
+    if (Request.Cookies["RoleName"] != null)
+    {
+        rolename = Request.Cookies["RoleName"].Value;
+    }
+    if (Request.Cookies["Image"] != null)
+    {
+        Image = imgdata + Request.Cookies["Image"].Value;
+    }
+    if (Request.Cookies["TypeOfRole"] != null)
+    {
+        TypeOfRole = Request.Cookies["TypeOfRole"].Value.ToString();
+    }
+    if (Request.Cookies["LanguageName"] != null)
+    {
+        LanguageName = Request.Cookies["LanguageName"].Value.ToString();
+    }
+}
+<style>
+    #surveys a {
+        color: black;
+        background-color: #a4d89a;
+    }
+</style>
+@using (Html.BeginForm("Surveys", "AGROMET", FormMethod.Post, new { enctype = "multipart/form-data", id = "cropadvisory" }))
+{
+    <div ng-app="CropAdvisory">
+        <div ng-controller="CropAdvisoryController">
+            <div class="ng-cloak">
+                <div class="row">
+                    <div class="col-md-2 brdrrite">
+                        <div class="mrgbtm colorscheme"><b>@Resource.State</b></div>
+                        @Html.HiddenFor(model => model.DistrictList, new { id = "DistrictList" })
+                        @Html.HiddenFor(model => model.BlockList, new { id = "BlockList" })
+                        @Html.HiddenFor(model => model.CropList, new { id = "CropList" })
+                        @Html.HiddenFor(model => model.LanguageList, new { id = "LanguageList" })
+                        @Html.HiddenFor(model => model.StateId, new { id = "stateidss" })
+                        @Html.HiddenFor(model => model.ScientistId, new { id = "ScientistIdss", Value = @TypeOfRole })
+                        <input type="hidden" id="stateids" ng-data="SelectedState.StateID" value="{{SelectedState.StateID}}" />
+                        <div>
+                            <select id="ddlState" class="ddlstate" ng-model="SelectedState" ng-init="GetState(@TypeOfRole,@StateID)" ng-options="y.StateName for (x,y) in State" ng-change="GetDistrict(@TypeOfRole,SelectedState.StateID);GetBlock(@TypeOfRole,SelectedState.StateID);"></select>
+                        </div>
+                        <br />
+                        <div class="brdrbtm mrgbtm colorscheme"><b>@Resource.Districts</b></div>
+                        <div ng-init="GetDistrict(@TypeOfRole,@StateID)" class="scrollstyle">
+                            <div ng-show="districttag">
+                                <label class="lblside">
+                                    <input type="checkbox" ng-model="selectAllDistricts" />
+                                    @Resource.Selectall
+                                </label>
+                                <br />
+                                <div ng-repeat="Districtitem in District" id="districtid">
+                                    <label class="lblside">
+                                        <input type="checkbox" id="{{Districtitem.DistrictID}}" ng-checked="selectAllDistricts"> {{Districtitem.DistrictName}}
+                                    </label>
+                                    <br />
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="brdrbtm mrgbtm colorscheme"><b>@Resource.Blocks</b></div>
+                        <div ng-init="GetBlock(@TypeOfRole, @StateID)" class="scrollstyle">
+                            <div ng-show="blocktag">
+                                <label class="lblside">
+                                    <input type="checkbox" ng-model="selectAllBlocks" />
+                                    @Resource.Selectall
+                                </label>
+                                <br />
+                                <div ng-repeat="Blockitem in Block" id="blockid">
+                                    <label class="lblside">
+                                        <input type="checkbox" id="{{Blockitem.BlockID}}" ng-checked="selectAllBlocks">
+                                        {{Blockitem.BlockName}}
+                                    </label><br />
+                                </div>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="brdrbtm mrgbtm colorscheme"><b>@Resource.Crops</b></div>
+                        <div ng-init="GetCrop(@TypeOfRole)" class="scrollstyle">
+                            <div ng-show="croptag">
+                                <label class="lblside">
+                                    <input type="checkbox" ng-model="selectAllCrops" />
+                                    @Resource.Selectall
+                                </label>
+                                <br />
+                                <div ng-repeat="Cropitem in Crop" id="cropid">
+                                    <label class="lblside">
+                                        <input type="checkbox" id="{{Cropitem.CropID}}" ng-checked="selectAllCrops">
+                                        {{Cropitem.CropName}}
+                                    </label><br />
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="col-md-8 paddingtitlespace">
+                        <div class="mrgbtm colorscheme"><b>@Resource.Title</b></div>
+                        <div class="mrgbtm">@Html.TextAreaFor(m => m.Title, new { id = "titles", @class = "title", placeholder = Html.DisplayName(Resource.EnterTitle) })</div>
+                        <div class="mrgbtm colorscheme"><b>@Resource.Question</b></div>
+                        <div class="mrgbtm">@Html.TextAreaFor(m => m.Question, new { id = "question", @class = "title", placeholder = Html.DisplayName(Resource.EnterQuestion) })</div>
+                        <div class="mrgbtm colorscheme"><b>@Resource.OptionOneTitle</b></div>
+                        <div class="mrgbtm">@Html.TextAreaFor(m => m.OptionOneTitle, new { id = "optiononetitle", @class = "optiontitle", placeholder = Html.DisplayName(Resource.EnterOptionOneTitle) })</div>
+                        <div class="mrgbtm colorscheme"><b>@Resource.OptionTwoTitle</b></div>
+                        <div class="mrgbtm">@Html.TextAreaFor(m => m.OptionTwoTitle, new { id = "optiontwotitle", @class = "optiontitle", placeholder = Html.DisplayName(Resource.EnterOptionTwoTitle) })</div>
+                    </div>
+                    <div class="col-md-2">
+                        <div class="rightchk">
+                            <div class="mrgbtm brdrbtm colorscheme"><b>@Resource.Transalationrequired</b></div>
+                            <div ng-init="GetLanguage()" class="scrollstyleright">
+                                <div ng-show="languagetag">
+                                    <label class="lblside">
+                                        <input type="checkbox" ng-model="selectAllLanguages" />
+                                        @Resource.Selectall
+                                    </label>
+                                    <br />
+                                    <div ng-repeat="Languageitem in Language" id="langaugeid">
+                                        <label class="lblside">
+                                            <input type="checkbox" id="{{Languageitem.LanguageTypeId}}" ngchecked="selectAllLangauges">
+                                            {{Languageitem.LanguageTypeName}}
+                                        </label><br />
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        <div><input type="submit" value="@Resource.Publish" class="btn btn-lg colorbackscheme btnadv btnhover" onclick="Publish()" /></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+}
+@section scripts {
+    <script>
+    var app = angular.module("CropAdvisory", []);
+    app.controller("CropAdvisoryController", function ($scope, $http) {
+        $scope.State = [];
+        $scope.District = [];
+        $scope.Block = [];
+        $scope.Crop = [];
+        $scope.Language = [];
+        $scope.GetState = function (TypeOfRole,StateID) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetStateList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { TypeOfRole: TypeOfRole, LanguageName: "@LanguageName", StateID: StateID }
+                }).then(function (response) {
+                    $scope.State = response.data;
+                    $scope.SelectedState = $scope.State[0];
+                },
+                function (response) {
+                    alert("No result found");
+                });
+        }
+        $scope.GetDistrict = function (TypeOfRole,StateID) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetDistrictList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { TypeOfRole: TypeOfRole, LanguageName: "@LanguageName", StateID: StateID }
+                }).then(function (response) {
+                    $scope.District = response.data;
+                    if ($scope.District.length > 0) {
+                    $scope.districttag = true;
+                }
+                },
+                function (response) {
+                    alert("No result found");
+                });
+        }
+        $scope.GetBlock = function (TypeOfRole, StateID) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetBlockList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { TypeOfRole: TypeOfRole, LanguageName: "@LanguageName", StateID: StateID }
+                }).then(function (response) {
+                $scope.Block = response.data;
+                    if ($scope.Block.length > 0) {
+                        $scope.blocktag = true;
+                    }
+                },
+                function (response) {
+                    alert("No result found");
+             });
+        }
+        $scope.GetCrop = function (TypeOfRole) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetCropList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { TypeOfRole: TypeOfRole, LanguageName: "@LanguageName" }
+                }).then(function (response) {
+                    $scope.Crop = response.data;
+                    if ($scope.Crop.length > 0) {
+                        $scope.croptag = true;
+                    }
+                },
+                function (response) {
+                    alert("No result found");
+                });
+        }
+        $scope.GetLanguage = function () {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetLanguageList", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { LanguageTypeId: 0, LanguageTypeName: "@LanguageName" }
+                }).then(function (response) {
+                    $scope.Language = response.data;
+                    if ($scope.Language.length > 0) {
+                        $scope.languagetag = true;
+                    }
+                },
+                function (response) {
+                    alert("No result found");
+                });
+        }
+    });
+    </script>
+    <script>
+        function Publish() {
+            $("#DistrictList").val("");
+            $('#districtid label').find('input[type="checkbox"]').each(function () {
+                if (this.checked == true) {
+                    $("#DistrictList").val($("#DistrictList").val() + "," + $(this).attr('id'));
+                }
+            });
+            $("#BlockList").val("");
+            $('#blockid label').find('input[type="checkbox"]').each(function () {
+                if (this.checked == true) {
+                    $("#BlockList").val($("#BlockList").val() + "," + $(this).attr('id'));
+                }
+            });
+            $("#CropList").val("");
+            $('#cropid label').find('input[type="checkbox"]').each(function () {
+                if (this.checked == true) {
+                    $("#CropList").val($("#CropList").val() + "," + $(this).attr('id'));
+                }
+            });
+            $("#LanguageList").val("");
+            $('#langaugeid label').find('input[type="checkbox"]').each(function () {
+                if (this.checked == true) {
+                    $("#LanguageList").val($("#LanguageList").val() + "," + $(this).attr('id'));
+                }
+            });
+            $("#stateidss").val($('#stateids').val());
+            $("#cropadvisory").submit();
+        }
+    </script>
+}

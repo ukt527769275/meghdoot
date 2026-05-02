@@ -1,0 +1,352 @@
+﻿
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <link rel="shortcut icon" href="~/favicon.ico" type="image/x-icon" />
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="theme-color" content="#3b5998" />
+    <meta name="Description" content="AGROMET Solution">
+    <title>@Resource.Advisory - @Resource.AGROMET</title>
+
+    <link href='@Scripts.Url("~/Content/css")' rel="stylesheet" async />
+    <script src='@Scripts.Url("~/bundles/modernizr")' async></script>
+    <script src='@Scripts.Url("~/bundles/jquery")'></script>
+    @Scripts.Render("~/bundles/angular")
+</head>
+<body>
+
+
+    <div>
+        @using Resources
+        @{
+            ViewBag.Title = "AdvisoryDetails";
+            var LanguageName = ViewBag.LanguageType;
+            var CropAdvisoryID = ViewBag.AdvisoryId;
+        }
+        <div ng-app="viewCropAdvisory">
+            <div ng-controller="ViewCropAdvisoryController">
+                <div class="ng-cloak">
+                    <div class="row mrgbtm brdrbtmdtl">
+                        <div class="col-xs-2 col-sm-3 col-md-3">
+                            <div>
+                            <img src="~/Content/images/Ministry-of-Earth-Sciences.jpg" type="image/png" alt="Ministry of Earth Sciences" class="imglogo" />
+                            </div>
+                        </div>
+                        <div class="col-xs-8 col-sm-6 col-md-6 text-center colorscheme paddingfix">
+                            <h2 class="hidden-xs">@Resource.AGROMET</h2>
+                            <h3 class="hidden-sm hidden-md hidden-lg">@Resource.AGROMET</h3>
+                        </div>
+                        <div class="col-xs-2 col-sm-3 col-md-3">
+                         
+                        </div>
+                    </div>
+                    <div ng-show="AdvisoryDetails">
+                        <div class="h3 center-block colorscheme text-center  widthfit">@Resource.Advisory</div>
+                        <br />
+                        <div class="row" ng-init="GetCropAdvisoryById(@CropAdvisoryID);GetDistrictMapping(@CropAdvisoryID);GetBlockMapping(@CropAdvisoryID);GetCropMapping(@CropAdvisoryID);GetAttachmentMapping(@CropAdvisoryID,ImageAttachent);GetAttachmentMapping(@CropAdvisoryID,AudioAttachent)">
+                            <div class="col-xs-7 col-sm-8 col-md-9">
+                                <div class="colorscheme brdrbtmdtl lblfontsize mrgbtm">@Resource.Title</div>
+                                <div class="mrgleft">{{CropAdvisoryDetails.Title}}</div>
+                            </div>
+                            <div class="col-xs-5 col-sm-4 col-md-3">
+                                <table class="pull-right">
+                                    <tr>
+                                        <td>
+                                            <img src="~/Content/images/list_calendar.png" class="advisoryicon pull-left mrgbtm" />
+                                            <br /><br />
+                                        </td>
+                                        <td>
+                                            <span class="paddingtextleft">{{CropAdvisoryDetails.CreatedDate}}</span>
+                                            <br /><br />
+                                        </td>
+                                    </tr>
+                                    <tr>
+                                        <td>
+                                            <img src="~/Content/images/category.png" class="advisoryicon pull-left" />
+                                        </td>
+                                        <td> <div class="paddingtextleft">{{CropAdvisoryDetails.Category}}</div></td>
+                                    </tr>
+                                </table>
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-xs-push-0 col-sm-8 col-md-9">
+                                <div class="colorscheme brdrbtmdtl mrgbtm lblfontsize">
+                                    @Resource.BriefText
+                                </div>
+                                <div class="mrgleft">
+                                    <span>
+                                        {{CropAdvisoryDetails.BriefText}}
+                                    </span>
+                                </div>
+                            </div>
+                            <div class="hidden-xs col-sm-4 col-md-3">
+                            </div>
+                        </div>
+                        <br />
+                        <div class="row">
+                            <div class="col-xs-push-0 col-sm-8 col-md-9">
+                                <div class="colorscheme brdrbtmdtl mrgbtm lblfontsize">@Resource.Recommendations</div>
+                                <div class="mrgleft"><span class="contentwrap">{{CropAdvisoryDetails.Recommendations}}</span></div>
+                            </div>
+                            <div class="hidden-xs col-sm-4 col-md-3">
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div ng-hide="imagetag" class="col-xs-push-0 paddingtextleft">
+                                <br />
+                                <br />
+                                <div class="mrgbtm paddingimg">
+                                <div class="colorscheme lblfontsize">@Resource.Images</div>
+                                </div>
+                                <div ng-repeat="imageitem in Images" class="col-xs-2 col-sm-2 col-md-2">
+                                    <button type="button" class="btn btn-default btn-link" @*data-toggle="modal" data-target="#ImageModal"*@ ng-click="ViewImage(imageitem.ImagePath)">
+                                        <image src="{{imageitem.ThumbNailImageName}}" type="image/jpg" alt="" class="thumbimg"></image>
+                                    </button>
+                                </div>
+                            </div>
+                        </div>
+                        <div class="row">
+                            <div ng-hide="audiotag" class="col-xs-push-0 colorscheme lblfontsize">
+                                <br />
+                                <div class="mrgbtm mrgleft">
+                                    @Resource.Audio
+                                </div> 
+                                <div ng-hide="audiotag" ng-repeat="Audioitem in Audio" class="mrgleft">
+                                    <audio src="{{Audioitem.ImagePath}}" typeof="audio/mp3"></audio>
+                                    <audio controls>
+                                        <source src="{{Audioitem.ImagePath}}" type="audio/ogg">
+                                        <source src="{{Audioitem.ImagePath}}" type="audio/mpeg">
+                                        <source src="{{Audioitem.ImagePath}}" type="audio/mp3">
+                                        @Resource.NotSupport
+                                    </audio>
+                                    <br />
+                                    <br />
+                                </div>
+                            </div>
+                                
+                        </div>
+                        <div class="row">
+                            <div class="mrgbtm paddingimg">
+                                <div class="colorscheme lblfontsize">@Resource.AdvisoryFor</div>
+                            </div>
+                            <div class="panel-group col-xs-pull-0 col-sm-pull-0 col-md-4" id="accordion">
+                                <div ng-hide="districttag" class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse1" class="uline">
+                                                @Resource.Districts <span class="pull-right"> <i class="arrow down"></i></span>
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse1" class="panel-collapse collapse">
+                                        <ul class="list-group">
+                                            <li class="list-group-item" ng-repeat="Districtitem in DistrictMapping">
+                                                {{Districtitem.DistictName}}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div ng-hide="blocktag" class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse2" class="uline">
+                                                @Resource.Blocks <span class="pull-right"> <i class="arrow down"></i></span>
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse2" class="panel-collapse collapse">
+                                        <ul class="list-group">
+                                            <li class="list-group-item" ng-repeat="Blockitem in BlockMapping">
+                                                {{Blockitem.BlockName}}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                                <div ng-hide="croptag" class="panel panel-default">
+                                    <div class="panel-heading">
+                                        <h4 class="panel-title">
+                                            <a data-toggle="collapse" data-parent="#accordion" href="#collapse3" class="uline">
+                                                @Resource.Crops <span class="pull-right"> <i class="arrow down"></i></span>
+                                            </a>
+                                        </h4>
+                                    </div>
+                                    <div id="collapse3" class="panel-collapse collapse">
+                                        <ul class="list-group">
+                                            <li class="list-group-item" ng-repeat="Cropitem in CropMapping">
+                                                {{Cropitem.CropName}}
+                                            </li>
+                                        </ul>
+                                    </div>
+                                </div>
+                            </div>
+                            <div class="col-xs-pull-0 col-sm-pull-0 col-md-1"></div>
+
+                        </div>
+                    </div>
+                </div>
+                <div class="modal fade" id="ImageModal" tabindex="-1" role="dialog" aria-labelledby="imageModalCenterTitle" aria-hidden="true">
+                    <div class="modal-dialog modal-dialog-centered modal-lg" role="document">
+                        <div class="modal-content">
+                            <div class="modal-body">
+                                <button type="button" class="close" data-dismiss="modal"><span class="redcolor">  @Resource.Close </span><span class="redcolor"> &times;</span></button>
+                                <br />
+                                <br />
+                                <image src="{{Imageurl}}" alt="" class="fillavailable" style="height:500px"></image>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <script>
+    var app = angular.module("viewCropAdvisory", []);
+    app.controller("ViewCropAdvisoryController", function ($scope, $http) {
+        $scope.State = [];
+        $scope.District = [];
+        $scope.Block = [];
+        $scope.Crop = [];
+        $scope.Category = [];
+        $scope.Langauge = [];
+        $scope.CropAdvisory = [];
+        $scope.CropAdvisoryById = [];
+        $scope.CropAdvisoryDetails = {};
+        $scope.DistrictMapping = [];
+        $scope.BlockMapping = [];
+        $scope.CropMapping = [];
+        $scope.ImageAttachent = "Image";
+        $scope.AudioAttachent = "Audio";
+        $scope.Images = [];
+        $scope.Audio = [];
+        $scope.TotalAdvisory = "";
+        $scope.Imageurl = "";
+        $scope.AdvisoryDetails = false;
+
+        $scope.GetCropAdvisoryById = function (CropAdvisoryID) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetCropAdvisoryById", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { CropAdvisoryID: CropAdvisoryID, LanguageName: "@LanguageName" }
+            }).then(function (response) {
+                $scope.CropAdvisoryById = response.data;
+                $scope.CropAdvisoryDetails = $scope.CropAdvisoryById[0];
+            },
+                function (response) {
+                    alert("No result found");
+                });
+        }
+        $scope.GetDistrictMapping = function (CropAdvisoryID) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetCropAdvisoryDistrictMapping", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { CropAdvisoryID: CropAdvisoryID, LanguageName: "@LanguageName" }
+            }).then(function (response) {
+                $scope.DistrictMapping = response.data;
+                if (response.data.length == 0) {
+                    $scope.districttag = true;
+                }
+                else {
+                    $scope.districttag = false;
+                }
+            },
+                function (response) {
+                    alert("No result found");
+                });
+        }
+        $scope.GetBlockMapping = function (CropAdvisoryID) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetCropAdvisoryBlockMapping", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { CropAdvisoryID: CropAdvisoryID, LanguageName: "@LanguageName" }
+            }).then(function (response) {
+                $scope.BlockMapping = response.data;
+                if (response.data.length == 0) {
+                    $scope.blocktag = true;
+                }
+                else {
+                    $scope.blocktag = false;
+                }
+            },
+                function (response) {
+                    alert("No result found");
+                });
+        }
+        $scope.GetCropMapping = function (CropAdvisoryID) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetCropAdvisoryCropMapping", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { CropAdvisoryID: CropAdvisoryID, LanguageName: "@LanguageName" }
+            }).then(function (response) {
+                $scope.CropMapping = response.data;
+                if (response.data.length == 0) {
+                    $scope.croptag = true;
+                }
+                else {
+                    $scope.croptag = false;
+                }
+            },
+                function (response) {
+                    alert("No result found");
+                });
+        }
+        $scope.GetAttachmentMapping = function (CropAdvisoryID, Type) {
+            $http({
+                method: 'POST',
+                url: '@Url.Action("GetCropAdvisoryAttachmentMapping", "AGROMET")',
+                headers: {
+                    'Content-Type': "Application/Json"
+                },
+                data: { CropAdvisoryID: CropAdvisoryID, LanguageName: "@LanguageName", Type: Type }
+            }).then(function (response) {
+                if (Type == "Image") {
+                    $scope.Images = response.data;
+                    if (response.data.length == 0) {
+                        $scope.imagetag = true;
+                    }
+                    else {
+                        $scope.imagetag = false;
+                    }
+                }
+                if (Type == "Audio") {
+                    $scope.Audio = response.data;
+                    if (response.data.length == 0) {
+                        $scope.audiotag = true;
+                    }
+                    else {
+                        $scope.audiotag = false;
+                    }
+                }
+            },
+                function (response) {
+                    alert("No result found");
+                });
+            //$('#AdvisoryModal').modal();
+            $scope.AdvisoryDetails = true;
+
+        }
+        $scope.ViewImage = function (ImagePath) {
+            $scope.Imageurl = ImagePath;
+            $('#ImageModal').modal();
+        }
+    });
+        </script>
+    </div>
+
+</body>
+</html>
+
+
